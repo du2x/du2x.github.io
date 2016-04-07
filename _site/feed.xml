@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Your awesome title</title>
+    <description>Write an awesome description for your new site here. You can edit this line in _config.yml. It will appear in your document head meta (for Google search results) and in your feed.xml site description.
+</description>
+    <link>http://yourdomain.com/</link>
+    <atom:link href="http://yourdomain.com/feed.xml" rel="self" type="application/rss+xml"/>
+    <pubDate>Thu, 07 Apr 2016 17:27:43 +0000</pubDate>
+    <lastBuildDate>Thu, 07 Apr 2016 17:27:43 +0000</lastBuildDate>
+    <generator>Jekyll v3.0.3</generator>
+    
+      <item>
+        <title>Welcome to Jekyll!</title>
+        <description>&lt;p&gt;You’ll find this post in your &lt;code class=&quot;highlighter-rouge&quot;&gt;_posts&lt;/code&gt; directory. Go ahead and edit it and re-build the site to see your changes. You can rebuild the site in many different ways, but the most common way is to run &lt;code class=&quot;highlighter-rouge&quot;&gt;jekyll serve&lt;/code&gt;, which launches a web server and auto-regenerates your site when a file is updated.&lt;/p&gt;
+
+&lt;p&gt;To add new posts, simply add a file in the &lt;code class=&quot;highlighter-rouge&quot;&gt;_posts&lt;/code&gt; directory that follows the convention &lt;code class=&quot;highlighter-rouge&quot;&gt;YYYY-MM-DD-name-of-post.ext&lt;/code&gt; and includes the necessary front matter. Take a look at the source for this post to get an idea about how it works.&lt;/p&gt;
+
+&lt;p&gt;Jekyll also offers powerful support for code snippets:&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;print_hi&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+  &lt;span class=&quot;nb&quot;&gt;puts&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;Hi, &lt;/span&gt;&lt;span class=&quot;si&quot;&gt;#{&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;print_hi&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&#39;Tom&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;#=&amp;gt; prints &#39;Hi, Tom&#39; to STDOUT.&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;Check out the &lt;a href=&quot;http://jekyllrb.com/docs/home&quot;&gt;Jekyll docs&lt;/a&gt; for more info on how to get the most out of Jekyll. File all bugs/feature requests at &lt;a href=&quot;https://github.com/jekyll/jekyll&quot;&gt;Jekyll’s GitHub repo&lt;/a&gt;. If you have questions, you can ask them on &lt;a href=&quot;https://talk.jekyllrb.com/&quot;&gt;Jekyll Talk&lt;/a&gt;.&lt;/p&gt;
+
+</description>
+        <pubDate>Thu, 07 Apr 2016 17:20:50 +0000</pubDate>
+        <link>http://yourdomain.com/jekyll/update/2016/04/07/welcome-to-jekyll.html</link>
+        <guid isPermaLink="true">http://yourdomain.com/jekyll/update/2016/04/07/welcome-to-jekyll.html</guid>
+        
+        
+        <category>jekyll</category>
+        
+        <category>update</category>
+        
+      </item>
+    
+      <item>
+        <title>Authentication with JWT brief overview</title>
+        <description>&lt;p&gt;Last month I was searching about the best way to implement authentication/authorization in a new service. Then I found JWT. At a first glance, I feel confused about the way it works, but after reading a few articles and examples, it shows stunningly beautiful and simple. So I decided to write about it as the first post of my blog.&lt;/p&gt;
+
+&lt;h1 id=&quot;jwt-definition&quot;&gt;JWT Definition&lt;/h1&gt;
+
+&lt;p&gt;Let’s start with JWT definition, from Wikipedia:&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;JSON Web Token (JWT) is a JSON-based open standard (RFC 7519) for passing claims between parties
+in web application environment. The tokens are designed to be compact, URL-safe and usable especially 
+in web browser single sign-on (SSO) context.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;From that, we can assume JWT can be used as authentication mechanism and for secure message interchange.&lt;/p&gt;
+
+&lt;h1 id=&quot;traditional-session-based-authentication-vs-token-based-authentication&quot;&gt;Traditional session based authentication vs Token based authentication&lt;/h1&gt;
+
+&lt;p&gt;In authentication mechanisms context, JWT is a kind of a protocol to implement a stateless token based authentication, witch has many advantages over traditional session based authentication. Let’s briefly describe these two types of authentication:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;strong&gt;Traditional session based authentication:&lt;/strong&gt; a client authenticates with its credentials and receives a session_id and attaches this to every subsequent outgoing request. The session_id is just an identifier and the server does everything else.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;strong&gt;Token based authentication:&lt;/strong&gt; a client authenticaties with is credentials and receives signed token which is then attached to every subsequent request. The server validates the token in every request. The token can carry any type of information and can be read on client (security aspects discussed later on) or server side.&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/jwt1.png&quot; alt=&quot;Requests sequence diagram&quot; title=&quot;Requests/Response flow for each type of authentication&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Now let’s see which are the token based authentication main advantages:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;strong&gt;Token based authentication is stateless&lt;/strong&gt; A stateless web architecture is dependent only on the input parameters that are supplied. To achieve a stateless app, the underlying authentication mechanism has to be stateless. This property makes the scalability more cheap and simple. Here is a quick picture of how to scale a stateless service.&lt;/p&gt;
+
+    &lt;p&gt;&lt;img src=&quot;/images/jwt2.png&quot; alt=&quot;Scaling stateless&quot; title=&quot;Scaling stateless architecture&quot; /&gt;&lt;/p&gt;
+
+    &lt;p&gt;On the other hand, the traditional session based authentication is stateful, because it depends on server side data to be aware about user session state. The session data can be stored in memory or in database. To scale a stateful service, there are two options: using sticky sessions or non-sticky sessions. The sticky sessions option add rules on the load balancer to guarantee that every requests of the same user sessions goes to the same webserver that authenticated that user. The non-sticky sessions option is more efficient and complex. It adds another level of load balancing flow, like the image below:&lt;/p&gt;
+
+    &lt;p&gt;&lt;img src=&quot;/images/jwt3.png&quot; alt=&quot;Scaling stateful&quot; title=&quot;Scaling stateful sticky session architecture&quot; /&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;strong&gt;Token based authentication is easily extensible&lt;/strong&gt; Suppose that an user is authenticated in a service A so that it receives a token signed with a private key holded by service A. This token can be used to share session state of that user on service A on the whole internet. If a service B, that holds the public key of service A, wants to use the session state of users on service A, it can rely directly on that token.&lt;/p&gt;
+
+    &lt;p&gt;On the other hand, sharing session_id is not that simple. Session data is usually stored in databases not exposed directly on the internet. When the session data is stored in memory, that session_id would be shareable but not before a criptographic sign.&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;There other advantages also, like CORS issues and security issues, but I will leave those to another post.&lt;/p&gt;
+
+&lt;h1 id=&quot;conclusion&quot;&gt;Conclusion&lt;/h1&gt;
+
+&lt;p&gt;Those advantages are enougth in many cases to decide for using a standized way (JWT) to obtain a token based authentication mechanism.&lt;/p&gt;
+
+&lt;p&gt;Let’s see the JWT anatomy and good practicies on using JWT on next posts.&lt;/p&gt;
+
+</description>
+        <pubDate>Wed, 06 Apr 2016 16:09:02 +0000</pubDate>
+        <link>http://yourdomain.com/jwt/auth/2016/04/06/jwt-brief-overview.html</link>
+        <guid isPermaLink="true">http://yourdomain.com/jwt/auth/2016/04/06/jwt-brief-overview.html</guid>
+        
+        
+        <category>jwt</category>
+        
+        <category>auth</category>
+        
+      </item>
+    
+  </channel>
+</rss>

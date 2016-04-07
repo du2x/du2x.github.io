@@ -26,18 +26,18 @@ In authentication mechanisms context, JWT is a kind of a protocol to implement a
 
 * **Token based authentication:** a client authenticaties with is credentials and receives signed token which is then attached to every subsequent request. The server validates the token in every request. The token can carry any type of information and can be read on client (security aspects discussed later on) or server side. 
 
-![Requests sequence diagram](/blog/images/jwt1.png "Requests/Response flow for each type of authentication")
+![Requests sequence diagram](/images/jwt1.png "Requests/Response flow for each type of authentication")
 
 
 Now let's see which are the token based authentication main advantages:
 
 1. **Token based authentication is stateless** A stateless web architecture is dependent only on the input parameters that are supplied. To achieve a stateless app, the underlying authentication mechanism has to be stateless. This property makes the scalability more cheap and simple. Here is a quick picture of how to scale a stateless service.
 
-   ![Scaling stateless](/blog/images/jwt2.png "Scaling stateless architecture")
+   ![Scaling stateless](/images/jwt2.png "Scaling stateless architecture")
 
    On the other hand, the traditional session based authentication is stateful, because it depends on server side data to be aware about user session state. The session data can be stored in memory or in database. To scale a stateful service, there are two options: using sticky sessions or non-sticky sessions. The sticky sessions option add rules on the load balancer to guarantee that every requests of the same user sessions goes to the same webserver that authenticated that user. The non-sticky sessions option is more efficient and complex. It adds another level of load balancing flow, like the image below:
 
-   ![Scaling stateful](/blog/images/jwt3.png "Scaling stateful sticky session architecture")
+   ![Scaling stateful](/images/jwt3.png "Scaling stateful sticky session architecture")
 
 
 2. **Token based authentication is easily extensible** Suppose that an user is authenticated in a service A so that it receives a token signed with a private key holded by service A. This token can be used to share session state of that user on service A on the whole internet. If a service B, that holds the public key of service A, wants to use the session state of users on service A, it can rely directly on that token.  
