@@ -84,8 +84,17 @@ Now let's see which are the token based authentication main advantages:
 
    On the other hand, sharing session_id is not that simple. Session data is usually stored in databases not exposed directly on the internet. When the session data is stored in memory, that session_id would be shareable but not before a criptographic sign.
 
-
 There other advantages also, like CORS issues and security issues, but I will leave those to another post.
+
+# JWT vs other token standards
+
+Now let's compare JWT against other token standards: **Simple Web Tokens (SWT)** and **Security Assertion Markup Language (SAML)**
+
+As JSON is less verbose than XML, when it is encoded its size is also smaller, making JWT more compact than SAML. This makes JWT a good choice to be passed in HTML and HTTP environments. In fact, a JWT could be passed as an URL parameter.
+
+Security-wise, SWT can only be symmetricly signed by a shared secret using the HMAC algorithm. However, JWT and SAML tokens can use a public/private key pair in the form of a X.509 certificate for signing. Signing XML with XML Digital Signature without introducing obscure security holes is very difficult when compared to the simplicity of signing JSON.
+
+JSON parsers are common in most programming languages because they map directly to objects. Conversely, XML doesn't have a natural document-to-object mapping. This makes it easier to work with JWT than SAML assertions.
 
 # Conclusion
 

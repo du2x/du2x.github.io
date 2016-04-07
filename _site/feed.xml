@@ -6,8 +6,8 @@
 </description>
     <link>http://du2x.github.io/</link>
     <atom:link href="http://du2x.github.io/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Thu, 07 Apr 2016 19:11:51 +0000</pubDate>
-    <lastBuildDate>Thu, 07 Apr 2016 19:11:51 +0000</lastBuildDate>
+    <pubDate>Thu, 07 Apr 2016 19:29:01 +0000</pubDate>
+    <lastBuildDate>Thu, 07 Apr 2016 19:29:01 +0000</lastBuildDate>
     <generator>Jekyll v3.0.3</generator>
     
       <item>
@@ -111,12 +111,19 @@ secret)
 
 &lt;p&gt;There other advantages also, like CORS issues and security issues, but I will leave those to another post.&lt;/p&gt;
 
+&lt;h1 id=&quot;jwt-vs-other-token-standards&quot;&gt;JWT vs other token standards&lt;/h1&gt;
+
+&lt;p&gt;Now let’s compare JWT against other token standards: &lt;strong&gt;Simple Web Tokens (SWT)&lt;/strong&gt; and &lt;strong&gt;Security Assertion Markup Language (SAML)&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;As JSON is less verbose than XML, when it is encoded its size is also smaller, making JWT more compact than SAML. This makes JWT a good choice to be passed in HTML and HTTP environments. In fact, a JWT could be passed as an URL parameter.&lt;/p&gt;
+
+&lt;p&gt;Security-wise, SWT can only be symmetricly signed by a shared secret using the HMAC algorithm. However, JWT and SAML tokens can use a public/private key pair in the form of a X.509 certificate for signing. Signing XML with XML Digital Signature without introducing obscure security holes is very difficult when compared to the simplicity of signing JSON.&lt;/p&gt;
+
+&lt;p&gt;JSON parsers are common in most programming languages because they map directly to objects. Conversely, XML doesn’t have a natural document-to-object mapping. This makes it easier to work with JWT than SAML assertions.&lt;/p&gt;
+
 &lt;h1 id=&quot;conclusion&quot;&gt;Conclusion&lt;/h1&gt;
 
-&lt;p&gt;Those advantages are enougth in many cases to decide for using a standized way (JWT) to obtain a token based authentication mechanism.&lt;/p&gt;
-
-&lt;p&gt;Let’s see the JWT anatomy and good practicies on using JWT on next posts.&lt;/p&gt;
-
+&lt;p&gt;Those advantages are enougth in many cases to decide for using a compact, url-safe and standized way (JWT) to obtain a token based authentication mechanism. But how to use it? What are the best practicties? Let’s see later on next posts!&lt;/p&gt;
 </description>
         <pubDate>Wed, 06 Apr 2016 16:09:02 +0000</pubDate>
         <link>http://du2x.github.io/jwt/auth/2016/04/06/jwt-brief-overview.html</link>
