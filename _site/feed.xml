@@ -6,13 +6,13 @@
 </description>
     <link>http://du2x.github.io/</link>
     <atom:link href="http://du2x.github.io/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Thu, 07 Apr 2016 17:46:33 +0000</pubDate>
-    <lastBuildDate>Thu, 07 Apr 2016 17:46:33 +0000</lastBuildDate>
+    <pubDate>Thu, 07 Apr 2016 19:11:51 +0000</pubDate>
+    <lastBuildDate>Thu, 07 Apr 2016 19:11:51 +0000</lastBuildDate>
     <generator>Jekyll v3.0.3</generator>
     
       <item>
         <title>Authentication with JWT brief overview</title>
-        <description>&lt;p&gt;Last month I was searching about the best way to implement authentication/authorization in a new service. Then I found JWT. At a first glance, I feel confused about the way it works, but after reading a few articles and examples, it shows stunningly beautiful and simple. So I decided to write about it as the first post of my blog.&lt;/p&gt;
+        <description>&lt;p&gt;Last month I was searching about the best way to implement authentication/authorization in a new service. Then I found JWT. At a first glance, I feel confused about the way it works, but after reading a few articles and examples, JWT showed up beautiful and simple so that I decided to write about it as the first post of my blog.&lt;/p&gt;
 
 &lt;h1 id=&quot;jwt-definition&quot;&gt;JWT Definition&lt;/h1&gt;
 
@@ -25,6 +25,55 @@ in web browser single sign-on (SSO) context.&lt;/p&gt;
 &lt;/blockquote&gt;
 
 &lt;p&gt;From that, we can assume JWT can be used as authentication mechanism and for secure message interchange.&lt;/p&gt;
+
+&lt;p&gt;Another good definition comes from http://jwt.io:&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;JSON Web Tokens are an open, industry standard RFC 7519 method for representing claims 
+securely between two parties.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h2 id=&quot;jwt-structure&quot;&gt;JWT Structure&lt;/h2&gt;
+
+&lt;p&gt;To understand better about that, we should take a look on JWT structure:&lt;/p&gt;
+
+&lt;p&gt;JSON Web Tokens consist of a string with three parts separated by dots (.), which are:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Header&lt;/li&gt;
+  &lt;li&gt;Payload&lt;/li&gt;
+  &lt;li&gt;Signature&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;The &lt;strong&gt;header&lt;/strong&gt; consists of two parts: the type of token (witch is JWT) and the hashing algorithm, witch can be a symetric or asymetric hashing algorithm.&lt;/p&gt;
+
+&lt;p&gt;For example&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+	&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;alg&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;HS256&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+	&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;typ&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;JWT&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;The second part of the token is the &lt;strong&gt;payload&lt;/strong&gt;, which contains the claims. Claims are statements about an entity (typically, the user) and additional metadata. There are a set of predefined claims, like ‘iat’ (issued at), which are not mandatory but recommended,  and custom claims, witch can whatever you want, like ‘username’, ‘usermail’, ‘permissions’ and others.&lt;/p&gt;
+
+&lt;p&gt;The third part is the &lt;strong&gt;signature&lt;/strong&gt;. To create the signature part you have to take the encoded header, the encoded payload, a secret, the algorithm specified in the header, and sign that.&lt;/p&gt;
+
+&lt;p&gt;For example:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;HMACSHA256(
+base64UrlEncode(header) + &quot;.&quot; +
+base64UrlEncode(payload),
+secret)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;The resulting token would be something like that below:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWV9.TJVA95OrM7E2cBab30RMHrHDcEfxjoYZgeFONFh7HgQ
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
 &lt;h1 id=&quot;traditional-session-based-authentication-vs-token-based-authentication&quot;&gt;Traditional session based authentication vs Token based authentication&lt;/h1&gt;
 

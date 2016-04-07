@@ -6,7 +6,7 @@ date:   2016-04-06 16:09:02 +0000
 categories: jwt auth
 ---
 
-Last month I was searching about the best way to implement authentication/authorization in a new service. Then I found JWT. At a first glance, I feel confused about the way it works, but after reading a few articles and examples, it shows stunningly beautiful and simple. So I decided to write about it as the first post of my blog.
+Last month I was searching about the best way to implement authentication/authorization in a new service. Then I found JWT. At a first glance, I feel confused about the way it works, but after reading a few articles and examples, JWT showed up beautiful and simple so that I decided to write about it as the first post of my blog.
 
 # JWT Definition
 
@@ -17,6 +17,46 @@ Let's start with JWT definition, from Wikipedia:
 > in web browser single sign-on (SSO) context.
 
 From that, we can assume JWT can be used as authentication mechanism and for secure message interchange. 
+
+Another good definition comes from http://jwt.io:
+
+> JSON Web Tokens are an open, industry standard RFC 7519 method for representing claims 
+> securely between two parties.
+
+## JWT Structure
+
+To understand better about that, we should take a look on JWT structure:
+
+JSON Web Tokens consist of a string with three parts separated by dots (.), which are:
+
+* Header
+* Payload
+* Signature
+
+The **header** consists of two parts: the type of token (witch is JWT) and the hashing algorithm, witch can be a symetric or asymetric hashing algorithm.
+
+For example
+
+	{
+		"alg": "HS256",
+		"typ": "JWT"
+	}
+
+The second part of the token is the **payload**, which contains the claims. Claims are statements about an entity (typically, the user) and additional metadata. There are a set of predefined claims, like 'iat' (issued at), which are not mandatory but recommended,  and custom claims, witch can whatever you want, like 'username', 'usermail', 'permissions' and others.
+
+The third part is the **signature**. To create the signature part you have to take the encoded header, the encoded payload, a secret, the algorithm specified in the header, and sign that.
+
+For example:
+
+	HMACSHA256(
+	base64UrlEncode(header) + "." +
+	base64UrlEncode(payload),
+	secret)
+	
+The resulting token would be something like that below:
+
+	eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWV9.TJVA95OrM7E2cBab30RMHrHDcEfxjoYZgeFONFh7HgQ
+
 
 # Traditional session based authentication vs Token based authentication
 
@@ -49,8 +89,4 @@ There other advantages also, like CORS issues and security issues, but I will le
 
 # Conclusion
 
-Those advantages are enougth in many cases to decide for using a standized way (JWT) to obtain a token based authentication mechanism. 
-
-Let's see the JWT anatomy and good practicies on using JWT on next posts.
-
-
+Those advantages are enougth in many cases to decide for using a compact, url-safe and standized way (JWT) to obtain a token based authentication mechanism. But how to use it? What are the best practicties? Let's see later on next posts!

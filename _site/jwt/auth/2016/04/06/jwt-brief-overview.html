@@ -62,7 +62,7 @@
   </header>
 
   <div class="post-content" itemprop="articleBody">
-    <p>Last month I was searching about the best way to implement authentication/authorization in a new service. Then I found JWT. At a first glance, I feel confused about the way it works, but after reading a few articles and examples, it shows stunningly beautiful and simple. So I decided to write about it as the first post of my blog.</p>
+    <p>Last month I was searching about the best way to implement authentication/authorization in a new service. Then I found JWT. At a first glance, I feel confused about the way it works, but after reading a few articles and examples, JWT showed up beautiful and simple so that I decided to write about it as the first post of my blog.</p>
 
 <h1 id="jwt-definition">JWT Definition</h1>
 
@@ -75,6 +75,55 @@ in web browser single sign-on (SSO) context.</p>
 </blockquote>
 
 <p>From that, we can assume JWT can be used as authentication mechanism and for secure message interchange.</p>
+
+<p>Another good definition comes from http://jwt.io:</p>
+
+<blockquote>
+  <p>JSON Web Tokens are an open, industry standard RFC 7519 method for representing claims 
+securely between two parties.</p>
+</blockquote>
+
+<h2 id="jwt-structure">JWT Structure</h2>
+
+<p>To understand better about that, we should take a look on JWT structure:</p>
+
+<p>JSON Web Tokens consist of a string with three parts separated by dots (.), which are:</p>
+
+<ul>
+  <li>Header</li>
+  <li>Payload</li>
+  <li>Signature</li>
+</ul>
+
+<p>The <strong>header</strong> consists of two parts: the type of token (witch is JWT) and the hashing algorithm, witch can be a symetric or asymetric hashing algorithm.</p>
+
+<p>For example</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="p">{</span><span class="w">
+	</span><span class="nt">"alg"</span><span class="p">:</span><span class="w"> </span><span class="s2">"HS256"</span><span class="p">,</span><span class="w">
+	</span><span class="nt">"typ"</span><span class="p">:</span><span class="w"> </span><span class="s2">"JWT"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+</div>
+
+<p>The second part of the token is the <strong>payload</strong>, which contains the claims. Claims are statements about an entity (typically, the user) and additional metadata. There are a set of predefined claims, like ‘iat’ (issued at), which are not mandatory but recommended,  and custom claims, witch can whatever you want, like ‘username’, ‘usermail’, ‘permissions’ and others.</p>
+
+<p>The third part is the <strong>signature</strong>. To create the signature part you have to take the encoded header, the encoded payload, a secret, the algorithm specified in the header, and sign that.</p>
+
+<p>For example:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>HMACSHA256(
+base64UrlEncode(header) + "." +
+base64UrlEncode(payload),
+secret)
+</code></pre>
+</div>
+
+<p>The resulting token would be something like that below:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWV9.TJVA95OrM7E2cBab30RMHrHDcEfxjoYZgeFONFh7HgQ
+</code></pre>
+</div>
 
 <h1 id="traditional-session-based-authentication-vs-token-based-authentication">Traditional session based authentication vs Token based authentication</h1>
 
