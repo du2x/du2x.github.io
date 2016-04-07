@@ -104,5 +104,5 @@ Those advantages are enougth in many cases to decide for using a compact, url-sa
 
 If you want to see a simple example of use of JWT for authentication with python and AngularJS, see [JWT lab](http://github.com/du2x/jwtlab)
 
-If you want to see an example of single sign in a simulated VPN with virtual machines using JWT, see [JWT lab private network] (https://github.com/du2x/jwtlab_privatenetwork)
+If you want to see an example of single sign in a simulated VPN with virtual machines using JWT, see [JWT lab private network](https://github.com/du2x/jwtlab_privatenetwork)
 
