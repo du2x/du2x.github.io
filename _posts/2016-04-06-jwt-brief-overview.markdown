@@ -1,12 +1,12 @@
 ---
 layout: post
 comments: true
-title:  "Authentication with JWT brief overview"
+title:  "Authentication with JWT"
 date:   2016-04-06 16:09:02 +0000
 categories: jwt auth
 ---
 
-Last month I was searching about the best way to implement authentication/authorization in a new service. Then I found JWT. At a first glance, I feel confused about the way it works, but after reading a few articles and examples, JWT showed up beautiful and simple so that I decided to write about it as the first post of my blog.
+Last month I was searching about the best way to implement authentication/authorization in a new service. Then I found JWT. At a first glance, I feel confused about the way it works, but after reading a few articles and examples, authentication with JWT showed up beautiful and simple so that I decided to write about it as the first post of my blog.
 
 # JWT Definition
 
@@ -16,7 +16,7 @@ Let's start with JWT definition, from Wikipedia:
 > in web application environment. The tokens are designed to be compact, URL-safe and usable especially 
 > in web browser single sign-on (SSO) context.
 
-From that, we can assume JWT can be used as authentication mechanism and for secure message interchange. 
+From that, we can assume JWT can be used as part of a authentication mechanism or for secure message interchange. 
 
 Another good definition comes from http://jwt.io:
 
@@ -60,7 +60,7 @@ The resulting token would be something like that below:
 
 # Traditional session based authentication vs Token based authentication
 
-In authentication mechanisms context, JWT is a kind of a protocol to implement a stateless token based authentication, witch has many advantages over traditional session based authentication. Let's briefly describe these two types of authentication:
+In authentication mechanisms context, JWT is a way to create the token in a stateless token based authentication system, witch has many advantages over traditional session based authentication system. Let's briefly describe these two types of authentication:
 
 * **Traditional session based authentication:** a client authenticates with its credentials and receives a session_id and attaches this to every subsequent outgoing request. The session_id is just an identifier and the server does everything else.
 
@@ -69,9 +69,9 @@ In authentication mechanisms context, JWT is a kind of a protocol to implement a
 ![Requests sequence diagram](/images/jwt1.png "Requests/Response flow for each type of authentication")
 
 
-Now let's see which are the token based authentication main advantages:
+Now let's see witch are the token based authentication main advantages:
 
-1. **Token based authentication is stateless** A stateless web architecture is dependent only on the input parameters that are supplied. To achieve a stateless app, the underlying authentication mechanism has to be stateless. This property makes the scalability more cheap and simple. Here is a quick picture of how to scale a stateless service.
+1. **Token based authentication is stateless** A stateless web architecture is dependent only on the input parameters that are supplied. To achieve a stateless service, the underlying authentication mechanism has to be stateless. This property makes the scalability more cheap and simple. Here is a quick picture of how to scale a stateless service.
 
    ![Scaling stateless](/images/jwt2.png "Scaling stateless architecture")
 
