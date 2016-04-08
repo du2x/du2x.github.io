@@ -4,4 +4,5 @@ title: About
 permalink: /about/
 ---
 
-Developer, pythonist, learner. Wanna be data scientist.
+I am a developer, pythonist, learner and a wannabe data scientist.
+
