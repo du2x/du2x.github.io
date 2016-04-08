@@ -23,7 +23,9 @@ Another good definition comes from http://jwt.io:
 > JSON Web Tokens are an open, industry standard RFC 7519 method for representing claims 
 > securely between two parties.
 
-## JWT Structure
+What are those claims and how it can be represented securely between two parties? Let`s see.
+
+# JWT Structure
 
 To understand better about that, we should take a look on JWT structure:
 
@@ -75,7 +77,9 @@ Now let's see witch are the token based authentication main advantages:
 
    ![Scaling stateless](/images/jwt2.png "Scaling stateless architecture")
 
-   On the other hand, the traditional session based authentication is stateful, because it depends on server side data to be aware about user session state. The session data can be stored in memory or in database. To scale a stateful service, there are two options: using sticky sessions or non-sticky sessions. The sticky sessions option add rules on the load balancer to guarantee that every requests of the same user sessions goes to the same webserver that authenticated that user. The non-sticky sessions option is more efficient and complex. It adds another level of load balancing flow, like the image below:
+   On the other hand, the traditional session based authentication is stateful, because it depends on server side data to be aware about user session state. The session data can be stored in memory or in database. To scale a stateful service, there are two options: using sticky sessions or non-sticky sessions.
+
+   The sticky sessions option add rules on the load balancer to guarantee that every requests of the same user sessions goes to the same webserver that authenticated that user. The non-sticky sessions option is more efficient and complex. It adds another level of load balancing flow, like the image below:
 
    ![Scaling stateful](/images/jwt3.png "Scaling stateful sticky session architecture")
 
