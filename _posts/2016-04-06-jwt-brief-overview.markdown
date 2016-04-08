@@ -94,7 +94,7 @@ There other advantages also, like CORS issues and security issues, but I will le
 
 Now let's compare JWT against other token standards: **Simple Web Tokens (SWT)** and **Security Assertion Markup Language (SAML)**
 
-As JSON is less verbose than XML, when it is encoded its size is also smaller, making JWT more compact than SAML. This makes JWT a good choice to be passed in HTML and HTTP environments. In fact, a JWT could be passed as an URL parameter.
+As JSON is less verbose than XML, when it is encoded its size is also smaller, making JWT more compact than the SAML token. This makes JWT a good choice to be passed in HTML and HTTP environments. In fact, a JWT could be passed as an URL parameter.
 
 Security-wise, SWT can only be symmetricly signed by a shared secret using the HMAC algorithm. However, JWT and SAML tokens can use a public/private key pair in the form of a X.509 certificate for signing. Signing XML with XML Digital Signature without introducing obscure security holes is very difficult when compared to the simplicity of signing JSON.
 
