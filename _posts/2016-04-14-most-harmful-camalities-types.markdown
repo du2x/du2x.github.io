@@ -132,7 +132,7 @@ levels(storm_data$EVTYPE)[grep('smoke', levels(storm_data$EVTYPE))] = 'fog/smoke
 levels(storm_data$EVTYPE)[grep('snow', levels(storm_data$EVTYPE))] = 'ice/snow'
 levels(storm_data$EVTYPE)[grep('ice', levels(storm_data$EVTYPE))] = 'ice/snow'
 levels(storm_data$EVTYPE)[grep('dust', levels(storm_data$EVTYPE))] = 'dustStorm'
-levels(storm_data$EVTYPE)[grep('storm', levels(storm_data$EVTYPE))] = 'storm'
+levels(storm_data$EVTYPE)[grep('storm', levels(storm_data$EVTYPE))] = 'regular storm'
 levels(storm_data$EVTYPE)[grep('volcanic', levels(storm_data$EVTYPE))] = 'volcano'
 levels(storm_data$EVTYPE)[grep('urban', levels(storm_data$EVTYPE))] = 'urban stream'
 levels(storm_data$EVTYPE)[grep('wet', levels(storm_data$EVTYPE))] = 'temperature and wet'
@@ -250,7 +250,7 @@ fatalities_injuries_by_event
 ## 3                           flood     8602       1524
 ## 4                       lightning     5231        817
 ## 5                            seas      797        760
-## 6                           storm     4260        522
+## 6                   regular storm     4260        522
 ## 7                        ice/snow     4166        379
 ## 8                       avalanche      170        224
 ## 9                            rain      280        100
@@ -292,7 +292,7 @@ injuries_by_event_decade_wide
 ## 4 wind/typhoon/tornado/hurricane 14470 17265 21640 13232 15768 12407 6959
 ## 5            temperature and wet    NA    NA    NA    NA  4598  4101  851
 ## 6                       ice/snow    NA    NA    NA    NA  3707   440   19
-## 7                          storm    NA    NA    NA    NA  2122  1421  717
+## 7                  regular storm    NA    NA    NA    NA  2122  1421  717
 ```
 
 and fatalities data:
@@ -311,7 +311,7 @@ fatalities_by_event_decade_wide
 ## 4 wind/typhoon/tornado/hurricane 1419  942  998  699 1074 1157  715
 ## 5            temperature and wet   NA   NA   NA   NA 2117 1103  182
 ## 6                       ice/snow   NA   NA   NA   NA  294   81    4
-## 7                          storm   NA   NA   NA   NA  215  224   83
+## 7                  regular storm   NA   NA   NA   NA  215  224   83
 ```
 
 We can see that there are data only about wind/typhoon/tornado/hurricane event types before de 1990s. 
@@ -346,7 +346,7 @@ fatalities_injuries_by_event
 ## 3                           flood     8560       1471
 ## 4                       lightning     5117        795
 ## 5                            seas      796        758
-## 6                           storm     4025        477
+## 6                   regular storm     4025        477
 ## 7                        ice/snow     3597        333
 ## 8                       avalanche      170        224
 ## 9                            rain      266        100
@@ -354,7 +354,71 @@ fatalities_injuries_by_event
 ## ..                            ...      ...        ...
 ```
 
-Well, those are the most harmful to human health event types from 1993 to today.
+Those may be the most harmful to human health event types from 1993 to today.
 
+## Event types with the greatest economic consequences
 
+We should convert the values of `$PROPDMGEXP` and `$CROPDMGEXP` from literal to numeric.
+
+```R
+levels(new_storm_data$PROPDMGEXP)[levels(new_storm_data$PROPDMGEXP)=='B']="9"
+levels(new_storm_data$PROPDMGEXP)[levels(new_storm_data$PROPDMGEXP)=='K']="3"
+levels(new_storm_data$PROPDMGEXP)[levels(new_storm_data$PROPDMGEXP)=='m']="6"
+levels(new_storm_data$PROPDMGEXP)[levels(new_storm_data$PROPDMGEXP)=='M']="6"
+levels(new_storm_data$PROPDMGEXP)[levels(new_storm_data$PROPDMGEXP)=='k']="3"
+levels(new_storm_data$PROPDMGEXP)[levels(new_storm_data$PROPDMGEXP)=='K']="3"
+levels(new_storm_data$PROPDMGEXP)[levels(new_storm_data$PROPDMGEXP)=='m']="6"
+levels(new_storm_data$PROPDMGEXP)[levels(new_storm_data$PROPDMGEXP)=='M']="6"
+levels(new_storm_data$PROPDMGEXP)[levels(new_storm_data$PROPDMGEXP)=='']="0"
+
+levels(new_storm_data$CROPDMGEXP)[levels(new_storm_data$CROPDMGEXP)=='B']="9"
+levels(new_storm_data$CROPDMGEXP)[levels(new_storm_data$CROPDMGEXP)=='K']="3"
+levels(new_storm_data$CROPDMGEXP)[levels(new_storm_data$CROPDMGEXP)=='m']="6"
+levels(new_storm_data$CROPDMGEXP)[levels(new_storm_data$CROPDMGEXP)=='M']="6"
+levels(new_storm_data$CROPDMGEXP)[levels(new_storm_data$CROPDMGEXP)=='k']="3"
+levels(new_storm_data$CROPDMGEXP)[levels(new_storm_data$CROPDMGEXP)=='K']="3"
+levels(new_storm_data$CROPDMGEXP)[levels(new_storm_data$CROPDMGEXP)=='m']="6"
+levels(new_storm_data$CROPDMGEXP)[levels(new_storm_data$CROPDMGEXP)=='M']="6"
+levels(new_storm_data$CROPDMGEXP)[levels(new_storm_data$CROPDMGEXP)=='']="0"
+
+dmg_storm_data <- new_storm_data[new_storm_data$PROPDMGEXP %in% c('0', '1', '2', '3', '4', '6', '7', '8', '9'),]
+dmg_storm_data <- dmg_storm_data[dmg_storm_data$CROPDMGEXP %in% c('0', '1', '2', '3', '4', '6', '7', '8', '9'),]
+
+dmg_storm_data$PROPDMGEXP <- as.numeric(levels(dmg_storm_data$PROPDMGEXP))[dmg_storm_data$PROPDMGEXP]
+dmg_storm_data$CROPDMGEXP <- as.numeric(levels(dmg_storm_data$CROPDMGEXP))[dmg_storm_data$CROPDMGEXP]
+```
+Now, we can calculate the actual damage and put that value in a new column `$TOTAL_DMG`.
+
+```R
+dmg_storm_data$TOTAL_DMG = dmg_storm_data$CROPDMG*(10^dmg_storm_data$CROPDMGEXP) + dmg_storm_data$PROPDMG*(10^dmg_storm_data$PROPDMGEXP)
+```
+
+Now, let's group, summarize and arrange data.
+
+```R
+dmg_by_event <- dmg_storm_data  %>% 
+  group_by(EVTYPE) %>% 
+  summarize(damage=sum(TOTAL_DMG)) %>%
+  arrange(desc(damage))
+
+dmg_by_event
+```
+
+```
+## Source: local data frame [104 x 2]
+## 
+##                            EVTYPE       damage
+##                            (fctr)        (dbl)
+## 1                           flood 169161879613
+## 2  wind/typhoon/tornado/hurricane 128450147639
+## 3                           storm  64965912883
+## 4                            hail  18314402084
+## 5                         drought  14968172000
+## 6                        ice/snow  12268074410
+## 7                            fire   8285910130
+## 8                            rain   3989680990
+## 9             temperature and wet   2601044530
+## 10                      lightning    888767867
+## ..                            ...          ...
+```
 
