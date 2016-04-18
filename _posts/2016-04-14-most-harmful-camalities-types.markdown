@@ -70,13 +70,13 @@ str(strom_data)
  $ REFNUM    : num  1 2 3 4 5 6 7 8 9 10 ...
 ```
 
-We want compare the event types with each other. The event type values are stored in the `EVTYPE` column
+The main goal of this article is compare the event types with each other in respect of how harmful they are. The event type values are stored in the `$EVTYPE` column
 
-To analyze the damage against human health, we need to focus on `FATALITIES` and `INJURIES` columns. To think about the damage agains economy we will focus on `CROPDMGEXP`, `CROPDMG`, `PROPDMG` and `PROPDMGEXP`.
+To analyze the damage against human health, we need to focus on `$FATALITIES` and `$INJURIES` columns. To think about the damage against economy the focus changes to `$CROPDMGEXP`, `$CROPDMG`, `$PROPDMG` and `$PROPDMGEXP` columns.
 
 # Event type transformations
 
-The records from NOAA storm database has 985 distincts event types.
+The records from NOAA storm database have 985 distincts event types.
 
 ```R
 length(levels(storm_data$EVTYPE))
@@ -120,7 +120,7 @@ levels(storm_data$EVTYPE)[hail_idx]
 ## [47] "WIND/HAIL"
 ```
 
-We should group those close related event type values in order to make the comparison practicable.
+I should group those close related event type values in order to make the comparison practicable.
 
 ```R
 levels(storm_data$EVTYPE) <- tolower(levels(storm_data$EVTYPE))
@@ -208,7 +208,7 @@ levels(storm_data$EVTYPE)[smridx]
 ## [65] "summary: october 31"    "summary: sept. 18"
 ```
 
-The records with thoses values as event type are useless for the answer we want, so it`s reasonable  removing them from  data frame.
+The records with thoses values as event type are useless for the goal of this article, so it`s reasonable removing them from data frame.
 
 ```R
 storm_data <- storm_data[!grepl('summary', storm_data$EVTYPE), ]
@@ -222,14 +222,16 @@ length(levels(storm_data$EVTYPE))
 ```
 
 ```
-length(levels(storm_data$EVTYPE))
+## [1] 108
 ```
 
 # Analysis of human health damage by event type
 
-Let’s arrange the data records now, grouping by the event type and ordering by number of fatalities, and showing the number of injuries and number of fatalities.
+I'll describe in this section the analysis about the human health damage by event types.
 
-Here, we can do it easily by chaining operations from dplyr library.
+I should first arrange the data records, grouping by the event type and ordering by number of fatalities, and showing the number of injuries and number of fatalities.
+
+Here, we can do it easily by chaining operations from **dplyr** library.
 
 ```R
 fatalities_injuries_by_event <- storm_data  %>% 
@@ -314,9 +316,11 @@ fatalities_by_event_decade_wide
 ## 7                  regular storm   NA   NA   NA   NA  215  224   83
 ```
 
-We can see that there are data only about wind/typhoon/tornado/hurricane event types before de 1990s. 
+We can see there are data only about wind/typhoon/tornado/hurricane event types before de 1990s. 
 
-This fact makes the comparison unfair. We should consider only data from after the 1990s (more specifically 1993, but we will omit this analysis for simplicity))
+Probably, NOAA wasn't prepared to collect data about the other event types before the 1990s. This fact makes the comparison unfair. 
+
+I should consider only data from after the 1990s (more specifically 1993, but we will omit this analysis for simplicity))
 
 So, let us subset the data frame.
 
@@ -358,7 +362,9 @@ Those may be the most harmful to human health event types from 1993 to today.
 
 ## Event types with the greatest economic consequences
 
-We should convert the values of `$PROPDMGEXP` and `$CROPDMGEXP` from literal to numeric.
+Explain the PROPDMG columns
+
+I should convert the values of `$PROPDMGEXP` and `$CROPDMGEXP` from literal to numeric.
 
 ```R
 levels(new_storm_data$PROPDMGEXP)[levels(new_storm_data$PROPDMGEXP)=='B']="9"
