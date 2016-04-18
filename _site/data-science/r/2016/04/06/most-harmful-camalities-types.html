@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Most harmful Calamities types</title>
+  <meta name="description" content="Abstract">
+
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="canonical" href="http://du2x.github.io/data-science/r/2016/04/06/most-harmful-camalities-types.html">
+  <link rel="alternate" type="application/rss+xml" title="du2x Blog" href="http://du2x.github.io/feed.xml">
+</head>
+
+
+  <body>
+
+    <header class="site-header">
+
+  <div class="wrapper">
+
+    <a class="site-title" href="/">du2x Blog</a>
+
+    <nav class="site-nav">
+      <a href="#" class="menu-icon">
+        <svg viewBox="0 0 18 15">
+          <path fill="#424242" d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.031C17.335,0,18,0.665,18,1.484L18,1.484z"/>
+          <path fill="#424242" d="M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0c0-0.82,0.665-1.484,1.484-1.484 h15.031C17.335,6.031,18,6.696,18,7.516L18,7.516z"/>
+          <path fill="#424242" d="M18,13.516C18,14.335,17.335,15,16.516,15H1.484C0.665,15,0,14.335,0,13.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.031C17.335,12.031,18,12.696,18,13.516L18,13.516z"/>
+        </svg>
+      </a>
+
+      <div class="trigger">
+        
+          
+          <a class="page-link" href="/about/">About</a>
+          
+        
+          
+        
+          
+        
+          
+        
+      </div>
+    </nav>
+
+  </div>
+
+</header>
+
+
+    <div class="page-content">
+      <div class="wrapper">
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title" itemprop="name headline">Most harmful Calamities types</h1>
+    <p class="post-meta"><time datetime="2016-04-06T13:09:02-03:00" itemprop="datePublished">Apr 6, 2016</time></p>
+  </header>
+
+  <div class="post-content" itemprop="articleBody">
+    <h1>Abstract</h1>
+
+<p>Storms and other severe weather events can cause both public health and economic problems for communities and municipalities. Many severe events can result in fatalities, injuries, and property damage, and preventing such outcomes to the extent possible is a key concern.</p>
+
+<p>In this article, I describe an analysis made over the U.S. National Oceanic and Atmospheric Administration’s (NOAA) storm database to discover which types of events are most harmful with respect to population health and those that have the greatest economic consequences.</p>
+
+<p>This work is an assignment of Reproducible Research course, which is part of John Hopkins Data Science specialization that I am taking at Coursera.</p>
+
+<h1>Downloading and loading NOAA data</h1>
+<div class="highlight"><pre><code class="language-R" data-lang="R">download.file<span class="p">(</span><span class="s">&#39;https://d396qusza40orc.cloudfront.net/repdata%2Fdata%2FStormData.csv.bz2&#39;</span><span class="p">,</span> destfile<span class="o">=</span><span class="s">&#39;stormdata.csv.bz2&#39;</span><span class="p">)</span>
+storm_data <span class="o">&lt;-</span> read.csv<span class="p">(</span><span class="s">&quot;stormdata.csv.bz2&quot;</span><span class="p">,</span> strip.white <span class="o">=</span> <span class="kc">TRUE</span><span class="p">)</span>
+</code></pre></div>
+<h1>Exploring the dataframe</h1>
+
+<p>This is a relatively big data frame with many columns. So, the first thing to do is explore it and find out the relevant columns:</p>
+<div class="highlight"><pre><code class="language-R" data-lang="R">str<span class="p">(</span>strom_data<span class="p">)</span>
+</code></pre></div><div class="highlight"><pre><code class="language-text" data-lang="text">&#39;data.frame&#39;:   902297 obs. of  37 variables:
+ $ STATE__   : num  1 1 1 1 1 1 1 1 1 1 ...
+ $ BGN_DATE  : Factor w/ 16335 levels &quot;1/1/1966 0:00:00&quot;,..: 6523 6523 4242 11116 2224 2224 2260 383 3980 3980 ...
+ $ BGN_TIME  : Factor w/ 3608 levels &quot;00:00:00 AM&quot;,..: 272 287 2705 1683 2584 3186 242 1683 3186 3186 ...
+ $ TIME_ZONE : Factor w/ 22 levels &quot;ADT&quot;,&quot;AKS&quot;,&quot;AST&quot;,..: 7 7 7 7 7 7 7 7 7 7 ...
+ $ COUNTY    : num  97 3 57 89 43 77 9 123 125 57 ...
+ $ COUNTYNAME: Factor w/ 29601 levels &quot;&quot;,&quot;5NM E OF MACKINAC BRIDGE TO PRESQUE ISLE LT MI&quot;,..: 13513 1873 4598 10592 4372 10094 1973 23873 24418 4598 ...
+ $ STATE     : Factor w/ 72 levels &quot;AK&quot;,&quot;AL&quot;,&quot;AM&quot;,..: 2 2 2 2 2 2 2 2 2 2 ...
+ $ EVTYPE    : Factor w/ 985 levels &quot;   HIGH SURF ADVISORY&quot;,..: 834 834 834 834 834 834 834 834 834 834 ...
+ $ BGN_RANGE : num  0 0 0 0 0 0 0 0 0 0 ...
+ $ BGN_AZI   : Factor w/ 35 levels &quot;&quot;,&quot;  N&quot;,&quot; NW&quot;,..: 1 1 1 1 1 1 1 1 1 1 ...
+ $ BGN_LOCATI: Factor w/ 54429 levels &quot;&quot;,&quot; Christiansburg&quot;,..: 1 1 1 1 1 1 1 1 1 1 ...
+ $ END_DATE  : Factor w/ 6663 levels &quot;&quot;,&quot;1/1/1993 0:00:00&quot;,..: 1 1 1 1 1 1 1 1 1 1 ...
+ $ END_TIME  : Factor w/ 3647 levels &quot;&quot;,&quot; 0900CST&quot;,..: 1 1 1 1 1 1 1 1 1 1 ...
+ $ COUNTY_END: num  0 0 0 0 0 0 0 0 0 0 ...
+ $ COUNTYENDN: logi  NA NA NA NA NA NA ...
+ $ END_RANGE : num  0 0 0 0 0 0 0 0 0 0 ...
+ $ END_AZI   : Factor w/ 24 levels &quot;&quot;,&quot;E&quot;,&quot;ENE&quot;,&quot;ESE&quot;,..: 1 1 1 1 1 1 1 1 1 1 ...
+ $ END_LOCATI: Factor w/ 34506 levels &quot;&quot;,&quot; CANTON&quot;,&quot; TULIA&quot;,..: 1 1 1 1 1 1 1 1 1 1 ...
+ $ LENGTH    : num  14 2 0.1 0 0 1.5 1.5 0 3.3 2.3 ...
+ $ WIDTH     : num  100 150 123 100 150 177 33 33 100 100 ...
+ $ F         : int  3 2 2 2 2 2 2 1 3 3 ...
+ $ MAG       : num  0 0 0 0 0 0 0 0 0 0 ...
+ $ FATALITIES: num  0 0 0 0 0 0 0 0 1 0 ...
+ $ INJURIES  : num  15 0 2 2 2 6 1 0 14 0 ...
+ $ PROPDMG   : num  25 2.5 25 2.5 2.5 2.5 2.5 2.5 25 25 ...
+ $ PROPDMGEXP: Factor w/ 19 levels &quot;&quot;,&quot;-&quot;,&quot;?&quot;,&quot;+&quot;,..: 17 17 17 17 17 17 17 17 17 17 ...
+ $ CROPDMG   : num  0 0 0 0 0 0 0 0 0 0 ...
+ $ CROPDMGEXP: Factor w/ 9 levels &quot;&quot;,&quot;?&quot;,&quot;0&quot;,&quot;2&quot;,..: 1 1 1 1 1 1 1 1 1 1 ...
+ $ WFO       : Factor w/ 542 levels &quot;&quot;,&quot; CI&quot;,&quot;%SD&quot;,..: 1 1 1 1 1 1 1 1 1 1 ...
+ $ STATEOFFIC: Factor w/ 250 levels &quot;&quot;,&quot;ALABAMA, Central&quot;,..: 1 1 1 1 1 1 1 1 1 1 ...
+ $ ZONENAMES : Factor w/ 25112 levels &quot;&quot;,&quot;                                                                                                                               &quot;| __truncated__,..: 1 1 1 1 1 1 1 1 1 1 ...
+ $ LATITUDE  : num  3040 3042 3340 3458 3412 ...
+ $ LONGITUDE : num  8812 8755 8742 8626 8642 ...
+ $ LATITUDE_E: num  3051 0 0 0 0 ...
+ $ LONGITUDE_: num  8806 0 0 0 0 ...
+ $ REMARKS   : Factor w/ 436781 levels &quot;&quot;,&quot;\t&quot;,&quot;\t\t&quot;,..: 1 1 1 1 1 1 1 1 1 1 ...
+ $ REFNUM    : num  1 2 3 4 5 6 7 8 9 10 ...
+</code></pre></div>
+<p>We want compare the event types with each other. The event type values are stored in the <code>EVTYPE</code> column</p>
+
+<p>To analyze the damage against human health, we need to focus on <code>FATALITIES</code> and <code>INJURIES</code> columns. To think about the damage agains economy we will focus on <code>CROPDMGEXP</code>, <code>CROPDMG</code>, <code>PROPDMG</code> and <code>PROPDMGEXP</code>.</p>
+
+<h1>Event type transformations</h1>
+
+<p>The records from NOAA storm database has 985 distincts event types.</p>
+<div class="highlight"><pre><code class="language-R" data-lang="R"><span class="kp">length</span><span class="p">(</span><span class="kp">levels</span><span class="p">(</span>storm_data<span class="o">$</span>EVTYPE<span class="p">))</span>
+</code></pre></div><div class="highlight"><pre><code class="language-text" data-lang="text">## [1] 985
+</code></pre></div>
+<p>Many of those are closely related, for example:</p>
+<div class="highlight"><pre><code class="language-R" data-lang="R">hail_idx <span class="o">&lt;-</span> <span class="kp">grep</span><span class="p">(</span><span class="s">&#39;hail&#39;</span><span class="p">,</span> <span class="kp">levels</span><span class="p">(</span>storm_data<span class="o">$</span>EVTYPE<span class="p">),</span>  ignore.case <span class="o">=</span> <span class="kc">TRUE</span><span class="p">)</span>
+<span class="kp">levels</span><span class="p">(</span>storm_data<span class="o">$</span>EVTYPE<span class="p">)[</span>hail_idx<span class="p">]</span>
+</code></pre></div><div class="highlight"><pre><code class="language-text" data-lang="text">##  [1] &quot;DEEP HAIL&quot;                  &quot;FUNNEL CLOUD/HAIL&quot;         
+##  [3] &quot;GUSTY WIND/HAIL&quot;            &quot;HAIL&quot;                      
+##  [5] &quot;HAIL 0.75&quot;                  &quot;HAIL 0.88&quot;                 
+##  [7] &quot;HAIL 075&quot;                   &quot;HAIL 088&quot;                  
+##  [9] &quot;HAIL 1.00&quot;                  &quot;HAIL 1.75&quot;                 
+## [11] &quot;HAIL 1.75)&quot;                 &quot;HAIL 100&quot;                  
+## [13] &quot;HAIL 125&quot;                   &quot;HAIL 150&quot;                  
+## [15] &quot;HAIL 175&quot;                   &quot;HAIL 200&quot;                  
+## [17] &quot;HAIL 225&quot;                   &quot;HAIL 275&quot;                  
+## [19] &quot;HAIL 450&quot;                   &quot;HAIL 75&quot;                   
+## [21] &quot;HAIL 80&quot;                    &quot;HAIL 88&quot;                   
+## [23] &quot;HAIL ALOFT&quot;                 &quot;HAIL DAMAGE&quot;               
+## [25] &quot;HAIL FLOODING&quot;              &quot;HAIL STORM&quot;                
+## [27] &quot;Hail(0.75)&quot;                 &quot;HAIL/ICY ROADS&quot;            
+## [29] &quot;HAIL/WIND&quot;                  &quot;HAIL/WINDS&quot;                
+## [31] &quot;HAILSTORM&quot;                  &quot;HAILSTORMS&quot;                
+## [33] &quot;LATE SEASON HAIL&quot;           &quot;MARINE HAIL&quot;               
+## [35] &quot;NON SEVERE HAIL&quot;            &quot;small hail&quot;                
+## [37] &quot;Small Hail&quot;                 &quot;SMALL HAIL&quot;                
+## [39] &quot;THUNDERSTORM HAIL&quot;          &quot;THUNDERSTORM WIND/HAIL&quot;    
+## [41] &quot;THUNDERSTORM WINDS HAIL&quot;    &quot;THUNDERSTORM WINDS/ HAIL&quot;  
+## [43] &quot;THUNDERSTORM WINDS/HAIL&quot;    &quot;THUNDERSTORM WINDSHAIL&quot;    
+## [45] &quot;TORNADOES, TSTM WIND, HAIL&quot; &quot;TSTM WIND/HAIL&quot;            
+## [47] &quot;WIND/HAIL&quot;
+</code></pre></div>
+<p>We should group those close related event type values in order to make the comparison practicable.</p>
+<div class="highlight"><pre><code class="language-R" data-lang="R"><span class="kp">levels</span><span class="p">(</span>storm_data<span class="o">$</span>EVTYPE<span class="p">)</span> <span class="o">&lt;-</span> <span class="kp">tolower</span><span class="p">(</span><span class="kp">levels</span><span class="p">(</span>storm_data<span class="o">$</span>EVTYPE<span class="p">))</span>
+<span class="kp">levels</span><span class="p">(</span>storm_data<span class="o">$</span>EVTYPE<span class="p">)[</span><span class="kp">grep</span><span class="p">(</span><span class="s">&#39;frost&#39;</span><span class="p">,</span> <span class="kp">levels</span><span class="p">(</span>storm_data<span class="o">$</span>EVTYPE<span class="p">))]</span> <span class="o">=</span> <span class="s">&#39;ice/snow&#39;</span>
+<span class="kp">levels</span><span class="p">(</span>storm_data<span class="o">$</span>EVTYPE<span class="p">)[</span><span class="kp">grep</span><span class="p">(</span><span class="s">&#39;freez&#39;</span><span class="p">,</span> <span class="kp">levels</span><span class="p">(</span>storm_data<span class="o">$</span>EVTYPE<span class="p">))]</span> <span class="o">=</span> <span class="s">&#39;ice/snow&#39;</span>
+<span class="kp">levels</span><span class="p">(</span>storm_data<span class="o">$</span>EVTYPE<span class="p">)[</span><span class="kp">grep</span><span class="p">(</span><span class="s">&#39;blizzard&#39;</span><span class="p">,</span> <span class="kp">levels</span><span class="p">(</span>storm_data<span class="o">$</span>EVTYPE<span class="p">))]</span> <span class="o">=</span> <span class="s">&#39;ice/snow&#39;</span>
+<span class="kp">levels</span><span class="p">(</span>storm_data<span class="o">$</span>EVTYPE<span class="p">)[</span><span class="kp">grep</span><span class="p">(</span><span class="s">&#39;fog&#39;</span><span class="p">,</span> <span class="kp">levels</span><span class="p">(</span>storm_data<span class="o">$</span>EVTYPE<span class="p">))]</span> <span class="o">=</span> <span class="s">&#39;fog/smoke&#39;</span>
+<span class="kp">levels</span><span class="p">(</span>storm_data<span class="o">$</span>EVTYPE<span class="p">)[</span><span class="kp">grep</span><span class="p">(</span><span class="s">&#39;smoke&#39;</span><span class="p">,</span> <span class="kp">levels</span><span class="p">(</span>storm_data<span class="o">$</span>EVTYPE<span class="p">))]</span> <span class="o">=</span> <span class="s">&#39;fog/smoke&#39;</span>
+<span class="kp">levels</span><span class="p">(</span>storm_data<span class="o">$</span>EVTYPE<span class="p">)[</span><span class="kp">grep</span><span class="p">(</span><span class="s">&#39;snow&#39;</span><span class="p">,</span> <span class="kp">levels</span><span class="p">(</span>storm_data<span class="o">$</span>EVTYPE<span class="p">))]</span> <span class="o">=</span> <span class="s">&#39;ice/snow&#39;</span>
+<span class="kp">levels</span><span class="p">(</span>storm_data<span class="o">$</span>EVTYPE<span class="p">)[</span><span class="kp">grep</span><span class="p">(</span><span class="s">&#39;ice&#39;</span><span class="p">,</span> <span class="kp">levels</span><span class="p">(</span>storm_data<span class="o">$</span>EVTYPE<span class="p">))]</span> <span class="o">=</span> <span class="s">&#39;ice/snow&#39;</span>
+<span class="kp">levels</span><span class="p">(</span>storm_data<span class="o">$</span>EVTYPE<span class="p">)[</span><span class="kp">grep</span><span class="p">(</span><span class="s">&#39;dust&#39;</span><span class="p">,</span> <span class="kp">levels</span><span class="p">(</span>storm_data<span class="o">$</span>EVTYPE<span class="p">))]</span> <span class="o">=</span> <span class="s">&#39;dustStorm&#39;</span>
+<span class="kp">levels</span><span class="p">(</span>storm_data<span class="o">$</span>EVTYPE<span class="p">)[</span><span class="kp">grep</span><span class="p">(</span><span class="s">&#39;storm&#39;</span><span class="p">,</span> <span class="kp">levels</span><span class="p">(</span>storm_data<span class="o">$</span>EVTYPE<span class="p">))]</span> <span class="o">=</span> <span class="s">&#39;storm&#39;</span>
+<span class="kp">levels</span><span class="p">(</span>storm_data<span class="o">$</span>EVTYPE<span class="p">)[</span><span class="kp">grep</span><span class="p">(</span><span class="s">&#39;volcanic&#39;</span><span class="p">,</span> <span class="kp">levels</span><span class="p">(</span>storm_data<span class="o">$</span>EVTYPE<span class="p">))]</span> <span class="o">=</span> <span class="s">&#39;volcano&#39;</span>
+<span class="kp">levels</span><span class="p">(</span>storm_data<span class="o">$</span>EVTYPE<span class="p">)[</span><span class="kp">grep</span><span class="p">(</span><span class="s">&#39;urban&#39;</span><span class="p">,</span> <span class="kp">levels</span><span class="p">(</span>storm_data<span class="o">$</span>EVTYPE<span class="p">))]</span> <span class="o">=</span> <span class="s">&#39;urban stream&#39;</span>
+<span class="kp">levels</span><span class="p">(</span>storm_data<span class="o">$</span>EVTYPE<span class="p">)[</span><span class="kp">grep</span><span class="p">(</span><span class="s">&#39;wet&#39;</span><span class="p">,</span> <span class="kp">levels</span><span class="p">(</span>storm_data<span class="o">$</span>EVTYPE<span class="p">))]</span> <span class="o">=</span> <span class="s">&#39;temperature and wet&#39;</span>
+<span class="kp">levels</span><span class="p">(</span>storm_data<span class="o">$</span>EVTYPE<span class="p">)[</span><span class="kp">grep</span><span class="p">(</span><span class="s">&#39;wind&#39;</span><span class="p">,</span> <span class="kp">levels</span><span class="p">(</span>storm_data<span class="o">$</span>EVTYPE<span class="p">))]</span> <span class="o">=</span> <span class="s">&#39;wind/typhoon/tornado/hurricane&#39;</span>
+<span class="kp">levels</span><span class="p">(</span>storm_data<span class="o">$</span>EVTYPE<span class="p">)[</span><span class="kp">grep</span><span class="p">(</span><span class="s">&#39;tornad&#39;</span><span class="p">,</span> <span class="kp">levels</span><span class="p">(</span>storm_data<span class="o">$</span>EVTYPE<span class="p">))]</span> <span class="o">=</span> <span class="s">&#39;wind/typhoon/tornado/hurricane&#39;</span>
+<span class="kp">levels</span><span class="p">(</span>storm_data<span class="o">$</span>EVTYPE<span class="p">)[</span><span class="kp">grep</span><span class="p">(</span><span class="s">&#39;typhoon&#39;</span><span class="p">,</span> <span class="kp">levels</span><span class="p">(</span>storm_data<span class="o">$</span>EVTYPE<span class="p">))]</span> <span class="o">=</span> <span class="s">&#39;wind/typhoon/tornado/hurricane&#39;</span>
+<span class="kp">levels</span><span class="p">(</span>storm_data<span class="o">$</span>EVTYPE<span class="p">)[</span><span class="kp">grep</span><span class="p">(</span><span class="s">&#39;hurricane&#39;</span><span class="p">,</span> <span class="kp">levels</span><span class="p">(</span>storm_data<span class="o">$</span>EVTYPE<span class="p">))]</span> <span class="o">=</span> <span class="s">&#39;wind/typhoon/tornado/hurricane&#39;</span>
+<span class="kp">levels</span><span class="p">(</span>storm_data<span class="o">$</span>EVTYPE<span class="p">)[</span><span class="kp">grep</span><span class="p">(</span><span class="s">&#39;dry&#39;</span><span class="p">,</span> <span class="kp">levels</span><span class="p">(</span>storm_data<span class="o">$</span>EVTYPE<span class="p">))]</span> <span class="o">=</span> <span class="s">&#39;temperature and wet&#39;</span>
+<span class="kp">levels</span><span class="p">(</span>storm_data<span class="o">$</span>EVTYPE<span class="p">)[</span><span class="kp">grep</span><span class="p">(</span><span class="s">&#39;warm&#39;</span><span class="p">,</span> <span class="kp">levels</span><span class="p">(</span>storm_data<span class="o">$</span>EVTYPE<span class="p">))]</span> <span class="o">=</span> <span class="s">&#39;temperature and wet&#39;</span>
+<span class="kp">levels</span><span class="p">(</span>storm_data<span class="o">$</span>EVTYPE<span class="p">)[</span><span class="kp">grep</span><span class="p">(</span><span class="s">&#39;dry&#39;</span><span class="p">,</span> <span class="kp">levels</span><span class="p">(</span>storm_data<span class="o">$</span>EVTYPE<span class="p">))]</span> <span class="o">=</span> <span class="s">&#39;temperature and wet&#39;</span>
+<span class="kp">levels</span><span class="p">(</span>storm_data<span class="o">$</span>EVTYPE<span class="p">)[</span><span class="kp">grep</span><span class="p">(</span><span class="s">&#39;tstm&#39;</span><span class="p">,</span> <span class="kp">levels</span><span class="p">(</span>storm_data<span class="o">$</span>EVTYPE<span class="p">))]</span> <span class="o">=</span> <span class="s">&#39;storm&#39;</span>
+<span class="kp">levels</span><span class="p">(</span>storm_data<span class="o">$</span>EVTYPE<span class="p">)[</span><span class="kp">grep</span><span class="p">(</span><span class="s">&#39;cold&#39;</span><span class="p">,</span> <span class="kp">levels</span><span class="p">(</span>storm_data<span class="o">$</span>EVTYPE<span class="p">))]</span> <span class="o">=</span> <span class="s">&#39;temperature and wet&#39;</span>
+<span class="kp">levels</span><span class="p">(</span>storm_data<span class="o">$</span>EVTYPE<span class="p">)[</span><span class="kp">grep</span><span class="p">(</span><span class="s">&#39;cool&#39;</span><span class="p">,</span> <span class="kp">levels</span><span class="p">(</span>storm_data<span class="o">$</span>EVTYPE<span class="p">))]</span> <span class="o">=</span> <span class="s">&#39;temperature and wet&#39;</span>
+<span class="kp">levels</span><span class="p">(</span>storm_data<span class="o">$</span>EVTYPE<span class="p">)[</span><span class="kp">grep</span><span class="p">(</span><span class="s">&#39;heat&#39;</span><span class="p">,</span> <span class="kp">levels</span><span class="p">(</span>storm_data<span class="o">$</span>EVTYPE<span class="p">))]</span> <span class="o">=</span> <span class="s">&#39;temperature and wet&#39;</span>
+<span class="kp">levels</span><span class="p">(</span>storm_data<span class="o">$</span>EVTYPE<span class="p">)[</span><span class="kp">grep</span><span class="p">(</span><span class="s">&#39;hypotherm&#39;</span><span class="p">,</span> <span class="kp">levels</span><span class="p">(</span>storm_data<span class="o">$</span>EVTYPE<span class="p">))]</span> <span class="o">=</span> <span class="s">&#39;hypothermia&#39;</span>
+<span class="kp">levels</span><span class="p">(</span>storm_data<span class="o">$</span>EVTYPE<span class="p">)[</span><span class="kp">grep</span><span class="p">(</span><span class="s">&#39;hail&#39;</span><span class="p">,</span> <span class="kp">levels</span><span class="p">(</span>storm_data<span class="o">$</span>EVTYPE<span class="p">))]</span> <span class="o">=</span> <span class="s">&#39;hail&#39;</span>
+<span class="kp">levels</span><span class="p">(</span>storm_data<span class="o">$</span>EVTYPE<span class="p">)[</span><span class="kp">grep</span><span class="p">(</span><span class="s">&#39;hot&#39;</span><span class="p">,</span> <span class="kp">levels</span><span class="p">(</span>storm_data<span class="o">$</span>EVTYPE<span class="p">))]</span> <span class="o">=</span> <span class="s">&#39;temperature and wet&#39;</span>
+<span class="kp">levels</span><span class="p">(</span>storm_data<span class="o">$</span>EVTYPE<span class="p">)[</span><span class="kp">grep</span><span class="p">(</span><span class="s">&#39;temperature&#39;</span><span class="p">,</span> <span class="kp">levels</span><span class="p">(</span>storm_data<span class="o">$</span>EVTYPE<span class="p">))]</span> <span class="o">=</span> <span class="s">&#39;temperature and wet&#39;</span>
+<span class="kp">levels</span><span class="p">(</span>storm_data<span class="o">$</span>EVTYPE<span class="p">)[</span><span class="kp">grep</span><span class="p">(</span><span class="s">&#39;thunder&#39;</span><span class="p">,</span> <span class="kp">levels</span><span class="p">(</span>storm_data<span class="o">$</span>EVTYPE<span class="p">))]</span> <span class="o">=</span> <span class="s">&#39;storm&#39;</span>
+<span class="kp">levels</span><span class="p">(</span>storm_data<span class="o">$</span>EVTYPE<span class="p">)[</span><span class="kp">grep</span><span class="p">(</span><span class="s">&#39;winter&#39;</span><span class="p">,</span> <span class="kp">levels</span><span class="p">(</span>storm_data<span class="o">$</span>EVTYPE<span class="p">))]</span> <span class="o">=</span> <span class="s">&#39;winter&#39;</span>
+<span class="kp">levels</span><span class="p">(</span>storm_data<span class="o">$</span>EVTYPE<span class="p">)[</span><span class="kp">grep</span><span class="p">(</span><span class="s">&#39;flood&#39;</span><span class="p">,</span> <span class="kp">levels</span><span class="p">(</span>storm_data<span class="o">$</span>EVTYPE<span class="p">))]</span> <span class="o">=</span> <span class="s">&#39;flood&#39;</span>
+<span class="kp">levels</span><span class="p">(</span>storm_data<span class="o">$</span>EVTYPE<span class="p">)[</span><span class="kp">grep</span><span class="p">(</span><span class="s">&#39;waterspout&#39;</span><span class="p">,</span> <span class="kp">levels</span><span class="p">(</span>storm_data<span class="o">$</span>EVTYPE<span class="p">))]</span> <span class="o">=</span> <span class="s">&#39;waterspout&#39;</span>
+<span class="kp">levels</span><span class="p">(</span>storm_data<span class="o">$</span>EVTYPE<span class="p">)[</span><span class="kp">grep</span><span class="p">(</span><span class="s">&#39;fire&#39;</span><span class="p">,</span> <span class="kp">levels</span><span class="p">(</span>storm_data<span class="o">$</span>EVTYPE<span class="p">))]</span> <span class="o">=</span> <span class="s">&#39;fire&#39;</span>
+<span class="kp">levels</span><span class="p">(</span>storm_data<span class="o">$</span>EVTYPE<span class="p">)[</span><span class="kp">grep</span><span class="p">(</span><span class="s">&#39;rip current&#39;</span><span class="p">,</span> <span class="kp">levels</span><span class="p">(</span>storm_data<span class="o">$</span>EVTYPE<span class="p">))]</span> <span class="o">=</span> <span class="s">&#39;seas&#39;</span>
+<span class="kp">levels</span><span class="p">(</span>storm_data<span class="o">$</span>EVTYPE<span class="p">)[</span><span class="kp">grep</span><span class="p">(</span><span class="s">&#39;seas&#39;</span><span class="p">,</span> <span class="kp">levels</span><span class="p">(</span>storm_data<span class="o">$</span>EVTYPE<span class="p">))]</span> <span class="o">=</span> <span class="s">&#39;seas&#39;</span>
+<span class="kp">levels</span><span class="p">(</span>storm_data<span class="o">$</span>EVTYPE<span class="p">)[</span><span class="kp">grep</span><span class="p">(</span><span class="s">&#39;surf&#39;</span><span class="p">,</span> <span class="kp">levels</span><span class="p">(</span>storm_data<span class="o">$</span>EVTYPE<span class="p">))]</span> <span class="o">=</span> <span class="s">&#39;seas&#39;</span>
+<span class="kp">levels</span><span class="p">(</span>storm_data<span class="o">$</span>EVTYPE<span class="p">)[</span><span class="kp">grep</span><span class="p">(</span><span class="s">&#39;marine&#39;</span><span class="p">,</span> <span class="kp">levels</span><span class="p">(</span>storm_data<span class="o">$</span>EVTYPE<span class="p">))]</span> <span class="o">=</span> <span class="s">&#39;seas&#39;</span>
+<span class="kp">levels</span><span class="p">(</span>storm_data<span class="o">$</span>EVTYPE<span class="p">)[</span><span class="kp">grep</span><span class="p">(</span><span class="s">&#39;wave&#39;</span><span class="p">,</span> <span class="kp">levels</span><span class="p">(</span>storm_data<span class="o">$</span>EVTYPE<span class="p">))]</span> <span class="o">=</span> <span class="s">&#39;seas&#39;</span>
+<span class="kp">levels</span><span class="p">(</span>storm_data<span class="o">$</span>EVTYPE<span class="p">)[</span><span class="kp">grep</span><span class="p">(</span><span class="s">&#39;lightning&#39;</span><span class="p">,</span> <span class="kp">levels</span><span class="p">(</span>storm_data<span class="o">$</span>EVTYPE<span class="p">))]</span> <span class="o">=</span> <span class="s">&#39;lightning&#39;</span>
+<span class="kp">levels</span><span class="p">(</span>storm_data<span class="o">$</span>EVTYPE<span class="p">)[</span><span class="kp">grep</span><span class="p">(</span><span class="s">&#39;rain&#39;</span><span class="p">,</span> <span class="kp">levels</span><span class="p">(</span>storm_data<span class="o">$</span>EVTYPE<span class="p">))]</span> <span class="o">=</span> <span class="s">&#39;rain&#39;</span>
+</code></pre></div>
+<p>There are also event types that doesn’t tell anything about an event type, for example:</p>
+<div class="highlight"><pre><code class="language-R" data-lang="R">smridx <span class="o">&lt;-</span> <span class="kp">grep</span><span class="p">(</span><span class="s">&#39;summary&#39;</span><span class="p">,</span> <span class="kp">levels</span><span class="p">(</span>storm_data<span class="o">$</span>EVTYPE<span class="p">),</span>  ignore.case <span class="o">=</span> <span class="kc">TRUE</span><span class="p">)</span>
+<span class="kp">levels</span><span class="p">(</span>storm_data<span class="o">$</span>EVTYPE<span class="p">)[</span>smridx<span class="p">]</span>
+</code></pre></div><div class="highlight"><pre><code class="language-text" data-lang="text">##  [1] &quot;summary august 10&quot;      &quot;summary august 11&quot;     
+##  [3] &quot;summary august 17&quot;      &quot;summary august 2-3&quot;    
+##  [5] &quot;summary august 21&quot;      &quot;summary august 28&quot;     
+##  [7] &quot;summary august 4&quot;       &quot;summary august 7&quot;      
+##  [9] &quot;summary august 9&quot;       &quot;summary jan 17&quot;        
+## [11] &quot;summary july 23-24&quot;     &quot;summary june 18-19&quot;    
+## [13] &quot;summary june 5-6&quot;       &quot;summary june 6&quot;        
+## [15] &quot;summary of april 12&quot;    &quot;summary of april 13&quot;   
+## [17] &quot;summary of april 21&quot;    &quot;summary of april 27&quot;   
+## [19] &quot;summary of april 3rd&quot;   &quot;summary of august 1&quot;   
+## [21] &quot;summary of july 11&quot;     &quot;summary of july 2&quot;     
+## [23] &quot;summary of july 22&quot;     &quot;summary of july 26&quot;    
+## [25] &quot;summary of july 29&quot;     &quot;summary of july 3&quot;     
+## [27] &quot;summary of june 10&quot;     &quot;summary of june 11&quot;    
+## [29] &quot;summary of june 12&quot;     &quot;summary of june 13&quot;    
+## [31] &quot;summary of june 15&quot;     &quot;summary of june 16&quot;    
+## [33] &quot;summary of june 18&quot;     &quot;summary of june 23&quot;    
+## [35] &quot;summary of june 24&quot;     &quot;summary of june 3&quot;     
+## [37] &quot;summary of june 30&quot;     &quot;summary of june 4&quot;     
+## [39] &quot;summary of june 6&quot;      &quot;summary of march 14&quot;   
+## [41] &quot;summary of march 23&quot;    &quot;summary of march 24&quot;   
+## [43] &quot;summary of march 24-25&quot; &quot;summary of march 27&quot;   
+## [45] &quot;summary of march 29&quot;    &quot;summary of may 10&quot;     
+## [47] &quot;summary of may 13&quot;      &quot;summary of may 14&quot;     
+## [49] &quot;summary of may 22&quot;      &quot;summary of may 22 am&quot;  
+## [51] &quot;summary of may 22 pm&quot;   &quot;summary of may 26 am&quot;  
+## [53] &quot;summary of may 26 pm&quot;   &quot;summary of may 31 am&quot;  
+## [55] &quot;summary of may 31 pm&quot;   &quot;summary of may 9-10&quot;   
+## [57] &quot;summary sept. 25-26&quot;    &quot;summary september 20&quot;  
+## [59] &quot;summary september 23&quot;   &quot;summary september 3&quot;   
+## [61] &quot;summary september 4&quot;    &quot;summary: nov. 16&quot;      
+## [63] &quot;summary: nov. 6-7&quot;      &quot;summary: oct. 20-21&quot;   
+## [65] &quot;summary: october 31&quot;    &quot;summary: sept. 18&quot;
+</code></pre></div>
+<p>The records with thoses values as event type are useless for the answer we want, so it`s reasonable  removing them from  data frame.</p>
+<div class="highlight"><pre><code class="language-R" data-lang="R">storm_data <span class="o">&lt;-</span> storm_data<span class="p">[</span><span class="o">!</span><span class="kp">grepl</span><span class="p">(</span><span class="s">&#39;summary&#39;</span><span class="p">,</span> storm_data<span class="o">$</span>EVTYPE<span class="p">),</span> <span class="p">]</span>
+storm_data <span class="o">&lt;-</span> <span class="kp">droplevels</span><span class="p">(</span>storm_data<span class="p">)</span> 
+</code></pre></div>
+<p>Now, there are 108 distinct event type in the storm_data data frame.</p>
+<div class="highlight"><pre><code class="language-R" data-lang="R"><span class="kp">length</span><span class="p">(</span><span class="kp">levels</span><span class="p">(</span>storm_data<span class="o">$</span>EVTYPE<span class="p">))</span>
+</code></pre></div><div class="highlight"><pre><code class="language-text" data-lang="text">length(levels(storm_data$EVTYPE))
+</code></pre></div>
+<h1>Analysis of human health damage by event type</h1>
+
+<p>Let’s arrange the data records now, grouping by the event type and ordering by number of fatalities, and showing the number of injuries and number of fatalities.</p>
+<div class="highlight"><pre><code class="language-R" data-lang="R">fatalities_injuries_by_event <span class="o">&lt;-</span> storm_data  <span class="o">%&gt;%</span> 
+  group_by<span class="p">(</span>EVTYPE<span class="p">)</span> <span class="o">%&gt;%</span> 
+  summarize<span class="p">(</span>injuries<span class="o">=</span><span class="kp">sum</span><span class="p">(</span>INJURIES<span class="p">),</span> fatalities<span class="o">=</span><span class="kp">sum</span><span class="p">(</span>FATALITIES<span class="p">))</span> <span class="o">%&gt;%</span>
+  arrange<span class="p">(</span>desc<span class="p">(</span>fatalities<span class="p">,</span> injuries<span class="p">))</span>
+
+fatalities_injuries_by_event
+</code></pre></div><div class="highlight"><pre><code class="language-text" data-lang="text">## Source: local data frame [108 x 3]
+## 
+##                            EVTYPE injuries fatalities
+##                            (fctr)    (dbl)      (dbl)
+## 1  wind/typhoon/tornado/hurricane   101741       7004
+## 2             temperature and wet     9550       3402
+## 3                           flood     8602       1524
+## 4                       lightning     5231        817
+## 5                            seas      797        760
+## 6                           storm     4260        522
+## 7                        ice/snow     4166        379
+## 8                       avalanche      170        224
+## 9                            rain      280        100
+## 10                           fire     1608         90
+## ..                            ...      ...        ...
+</code></pre></div>
+<p>As we can see, the “wind/typhoon/tornado/hurricane” event type has a much higher number of injuries then other event types. That is suspicious. Let`s investigate a bit more.</p>
+
+<h2>Arranging that by decades</h2>
+
+<p>Let’s see how these records are arranged by decades, focusing only on the top event types.</p>
+<div class="highlight"><pre><code class="language-R" data-lang="R">top_evtypes <span class="o">&lt;-</span> fatalities_injuries_by_event<span class="o">$</span>EVTYPE<span class="p">[</span><span class="m">1</span><span class="o">:</span><span class="m">7</span><span class="p">]</span>
+n_storm_data <span class="o">&lt;-</span> storm_data<span class="p">[</span>storm_data<span class="o">$</span>EVTYPE <span class="o">%in%</span> top_evtypes<span class="p">,]</span>
+n_storm_data<span class="o">$</span>YEAR <span class="o">=</span> <span class="kp">as.numeric</span><span class="p">(</span><span class="kp">format</span><span class="p">(</span><span class="kp">as.Date</span><span class="p">(</span>n_storm_data<span class="o">$</span>BGN_DATE<span class="p">,</span> format <span class="o">=</span> <span class="s">&quot;%m/%d/%Y %H:%M:%S&quot;</span><span class="p">),</span> <span class="s">&#39;%Y&#39;</span><span class="p">))</span>
+n_storm_data<span class="o">$</span>DECADE <span class="o">=</span> <span class="kp">as.integer</span><span class="p">(</span>n_storm_data<span class="o">$</span>YEAR <span class="o">/</span><span class="m">10</span><span class="p">)</span> <span class="o">*</span> <span class="m">10</span>
+
+fatalities_injuries_by_event_decade <span class="o">&lt;-</span> n_storm_data  <span class="o">%&gt;%</span> 
+       group_by<span class="p">(</span>EVTYPE<span class="p">,</span> DECADE<span class="p">)</span> <span class="o">%&gt;%</span> 
+       summarize<span class="p">(</span>injuries<span class="o">=</span><span class="kp">sum</span><span class="p">(</span>INJURIES<span class="p">),</span> fatalities<span class="o">=</span><span class="kp">sum</span><span class="p">(</span>FATALITIES<span class="p">))</span> <span class="o">%&gt;%</span>
+       arrange<span class="p">(</span>desc<span class="p">(</span>fatalities<span class="p">,</span> injuries<span class="p">))</span>
+</code></pre></div>
+<p>Now, let’s reshape data for better visualization. Firstly injuries data.</p>
+<div class="highlight"><pre><code class="language-R" data-lang="R">melted_injuries_by_event_decade <span class="o">&lt;-</span> melt<span class="p">(</span>fatalities_injuries_by_event_decade<span class="p">,</span> <span class="kt">c</span><span class="p">(</span><span class="s">&quot;EVTYPE&quot;</span><span class="p">,</span> <span class="s">&#39;DECADE&#39;</span><span class="p">),</span> <span class="s">&#39;injuries&#39;</span><span class="p">)</span>
+injuries_by_event_decade_wide <span class="o">&lt;-</span> dcast<span class="p">(</span>melted_injuries_by_event_decade<span class="p">,</span> EVTYPE <span class="o">~</span> DECADE<span class="p">)</span>
+injuries_by_event_decade_wide
+</code></pre></div><div class="highlight"><pre><code class="language-text" data-lang="text">##                           EVTYPE  1950  1960  1970  1980  1990  2000 2010
+## 1                           seas    NA    NA    NA    NA   192   502  103
+## 2                          flood    NA    NA    NA    NA  7473   773  356
+## 3                      lightning    NA    NA    NA    NA  2238  2617  376
+## 4 wind/typhoon/tornado/hurricane 14470 17265 21640 13232 15768 12407 6959
+## 5            temperature and wet    NA    NA    NA    NA  4598  4101  851
+## 6                       ice/snow    NA    NA    NA    NA  3707   440   19
+## 7                          storm    NA    NA    NA    NA  2122  1421  717
+</code></pre></div>
+<p>and fatalities data:</p>
+<div class="highlight"><pre><code class="language-R" data-lang="R">melted_fatalities_by_event_decade <span class="o">&lt;-</span> melt<span class="p">(</span>fatalities_injuries_by_event_decade<span class="p">,</span> <span class="kt">c</span><span class="p">(</span><span class="s">&quot;EVTYPE&quot;</span><span class="p">,</span> <span class="s">&#39;DECADE&#39;</span><span class="p">),</span> <span class="s">&#39;fatalities&#39;</span><span class="p">)</span>
+fatalities_by_event_decade_wide <span class="o">&lt;-</span> dcast<span class="p">(</span>melted_fatalities_by_event_decade<span class="p">,</span> EVTYPE <span class="o">~</span> DECADE<span class="p">)</span>
+fatalities_by_event_decade_wide
+</code></pre></div><div class="highlight"><pre><code class="language-text" data-lang="text">##                           EVTYPE 1950 1960 1970 1980 1990 2000 2010
+## 1                           seas   NA   NA   NA   NA  165  489  106
+## 2                          flood   NA   NA   NA   NA  654  635  235
+## 3                      lightning   NA   NA   NA   NA  351  411   55
+## 4 wind/typhoon/tornado/hurricane 1419  942  998  699 1074 1157  715
+## 5            temperature and wet   NA   NA   NA   NA 2117 1103  182
+## 6                       ice/snow   NA   NA   NA   NA  294   81    4
+## 7                          storm   NA   NA   NA   NA  215  224   83
+</code></pre></div>
+<p>We can see that there are data only about wind/typhoon/tornado/hurricane event types before de 1990s. </p>
+
+<p>This fact makes the comparison unfair. We should consider only data from after the 1990s (more specifically 1993, but we will omit this analysis for simplicity))</p>
+
+<p>So, let us subset the data frame.</p>
+<div class="highlight"><pre><code class="language-R" data-lang="R">storm_data<span class="o">$</span>YEAR <span class="o">=</span> <span class="kp">as.numeric</span><span class="p">(</span><span class="kp">format</span><span class="p">(</span><span class="kp">as.Date</span><span class="p">(</span>storm_data<span class="o">$</span>BGN_DATE<span class="p">,</span> format <span class="o">=</span> <span class="s">&quot;%m/%d/%Y %H:%M:%S&quot;</span><span class="p">),</span> <span class="s">&#39;%Y&#39;</span><span class="p">))</span>
+new_storm_data <span class="o">&lt;-</span> storm_data<span class="p">[</span>storm_data<span class="o">$</span>YEAR<span class="o">&gt;</span><span class="m">1993</span><span class="p">,]</span> 
+</code></pre></div>
+<p>And now, let`s see a fair comparison.</p>
+<div class="highlight"><pre><code class="language-R" data-lang="R">fatalities_injuries_by_event <span class="o">&lt;-</span> new_storm_data  <span class="o">%&gt;%</span> 
+  group_by<span class="p">(</span>EVTYPE<span class="p">)</span> <span class="o">%&gt;%</span> 
+  summarize<span class="p">(</span>injuries<span class="o">=</span><span class="kp">sum</span><span class="p">(</span>INJURIES<span class="p">),</span> fatalities<span class="o">=</span><span class="kp">sum</span><span class="p">(</span>FATALITIES<span class="p">))</span> <span class="o">%&gt;%</span>
+  arrange<span class="p">(</span>desc<span class="p">(</span>fatalities<span class="p">,</span> injuries<span class="p">))</span>
+
+fatalities_injuries_by_event
+</code></pre></div><div class="highlight"><pre><code class="language-text" data-lang="text">## Source: local data frame [104 x 3]
+## 
+##                            EVTYPE injuries fatalities
+##                            (fctr)    (dbl)      (dbl)
+## 1             temperature and wet     9544       3378
+## 2  wind/typhoon/tornado/hurricane    29392       2633
+## 3                           flood     8560       1471
+## 4                       lightning     5117        795
+## 5                            seas      796        758
+## 6                           storm     4025        477
+## 7                        ice/snow     3597        333
+## 8                       avalanche      170        224
+## 9                            rain      266        100
+## 10                           fire     1458         87
+## ..                            ...      ...        ...
+</code></pre></div>
+<p>Well, those are the most harmful to human health event types from 1993 to today.</p>
+
+  </div>
+
+<div id="disqus_thread"></div>
+<script>
+/**
+* RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+* LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables
+*/
+/*
+var disqus_config = function () {
+this.page.url = http://du2x.github.io/data-science/r/2016/04/06/most-harmful-camalities-types.html; // Replace PAGE_URL with your page's canonical URL variable
+this.page.identifier = /data-science/r/2016/04/06/most-harmful-camalities-types.html; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+};
+*/
+(function() { // DON'T EDIT BELOW THIS LINE
+var d = document, s = d.createElement('script');
+
+s.src = '//du2xblog.disqus.com/embed.js';
+
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+
+</article>
+
+      </div>
+    </div>
+
+    <footer class="site-footer">
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">du2x Blog</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li>du2x Blog</li>
+          <li><a href="mailto:dudumonteiro@gmail.com">dudumonteiro@gmail.com</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col footer-col-2">
+        <ul class="social-media-list">
+          
+          <li>
+            <a href="https://github.com/du2x"><span class="icon icon--github"><svg viewBox="0 0 16 16"><path fill="#828282" d="M7.999,0.431c-4.285,0-7.76,3.474-7.76,7.761 c0,3.428,2.223,6.337,5.307,7.363c0.388,0.071,0.53-0.168,0.53-0.374c0-0.184-0.007-0.672-0.01-1.32 c-2.159,0.469-2.614-1.04-2.614-1.04c-0.353-0.896-0.862-1.135-0.862-1.135c-0.705-0.481,0.053-0.472,0.053-0.472 c0.779,0.055,1.189,0.8,1.189,0.8c0.692,1.186,1.816,0.843,2.258,0.645c0.071-0.502,0.271-0.843,0.493-1.037 C4.86,11.425,3.049,10.76,3.049,7.786c0-0.847,0.302-1.54,0.799-2.082C3.768,5.507,3.501,4.718,3.924,3.65 c0,0,0.652-0.209,2.134,0.796C6.677,4.273,7.34,4.187,8,4.184c0.659,0.003,1.323,0.089,1.943,0.261 c1.482-1.004,2.132-0.796,2.132-0.796c0.423,1.068,0.157,1.857,0.077,2.054c0.497,0.542,0.798,1.235,0.798,2.082 c0,2.981-1.814,3.637-3.543,3.829c0.279,0.24,0.527,0.713,0.527,1.437c0,1.037-0.01,1.874-0.01,2.129 c0,0.208,0.14,0.449,0.534,0.373c3.081-1.028,5.302-3.935,5.302-7.362C15.76,3.906,12.285,0.431,7.999,0.431z"/></svg>
+</span><span class="username">du2x</span></a>
+
+          </li>
+          
+
+          
+          <li>
+            <a href="https://twitter.com/du2x"><span class="icon icon--twitter"><svg viewBox="0 0 16 16"><path fill="#828282" d="M15.969,3.058c-0.586,0.26-1.217,0.436-1.878,0.515c0.675-0.405,1.194-1.045,1.438-1.809c-0.632,0.375-1.332,0.647-2.076,0.793c-0.596-0.636-1.446-1.033-2.387-1.033c-1.806,0-3.27,1.464-3.27,3.27 c0,0.256,0.029,0.506,0.085,0.745C5.163,5.404,2.753,4.102,1.14,2.124C0.859,2.607,0.698,3.168,0.698,3.767 c0,1.134,0.577,2.135,1.455,2.722C1.616,6.472,1.112,6.325,0.671,6.08c0,0.014,0,0.027,0,0.041c0,1.584,1.127,2.906,2.623,3.206 C3.02,9.402,2.731,9.442,2.433,9.442c-0.211,0-0.416-0.021-0.615-0.059c0.416,1.299,1.624,2.245,3.055,2.271 c-1.119,0.877-2.529,1.4-4.061,1.4c-0.264,0-0.524-0.015-0.78-0.046c1.447,0.928,3.166,1.469,5.013,1.469 c6.015,0,9.304-4.983,9.304-9.304c0-0.142-0.003-0.283-0.009-0.423C14.976,4.29,15.531,3.714,15.969,3.058z"/></svg>
+</span><span class="username">du2x</span></a>
+
+          </li>
+          
+        </ul>
+      </div>
+
+      <div class="footer-col footer-col-3">
+        <p>Data science, python and other IT cool stuff. 
+</p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+
+
+  </body>
+
+</html>

@@ -6,126 +6,418 @@
 </description>
     <link>http://du2x.github.io/</link>
     <atom:link href="http://du2x.github.io/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Thu, 07 Apr 2016 19:29:01 +0000</pubDate>
-    <lastBuildDate>Thu, 07 Apr 2016 19:29:01 +0000</lastBuildDate>
-    <generator>Jekyll v3.0.3</generator>
+    <pubDate>Sat, 16 Apr 2016 17:08:09 -0300</pubDate>
+    <lastBuildDate>Sat, 16 Apr 2016 17:08:09 -0300</lastBuildDate>
+    <generator>Jekyll v2.4.0</generator>
     
       <item>
-        <title>Authentication with JWT brief overview</title>
-        <description>&lt;p&gt;Last month I was searching about the best way to implement authentication/authorization in a new service. Then I found JWT. At a first glance, I feel confused about the way it works, but after reading a few articles and examples, JWT showed up beautiful and simple so that I decided to write about it as the first post of my blog.&lt;/p&gt;
+        <title>Most harmful Calamities types</title>
+        <description>&lt;h1&gt;Abstract&lt;/h1&gt;
 
-&lt;h1 id=&quot;jwt-definition&quot;&gt;JWT Definition&lt;/h1&gt;
+&lt;p&gt;Storms and other severe weather events can cause both public health and economic problems for communities and municipalities. Many severe events can result in fatalities, injuries, and property damage, and preventing such outcomes to the extent possible is a key concern.&lt;/p&gt;
 
-&lt;p&gt;Let’s start with JWT definition, from Wikipedia:&lt;/p&gt;
+&lt;p&gt;In this article, I describe an analysis made over the U.S. National Oceanic and Atmospheric Administration’s (NOAA) storm database to discover which types of events are most harmful with respect to population health and those that have the greatest economic consequences.&lt;/p&gt;
+
+&lt;p&gt;This work is an assignment of Reproducible Research course, which is part of John Hopkins Data Science specialization that I am taking at Coursera.&lt;/p&gt;
+
+&lt;h1&gt;Downloading and loading NOAA data&lt;/h1&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-R&quot; data-lang=&quot;R&quot;&gt;download.file&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;#39;https://d396qusza40orc.cloudfront.net/repdata%2Fdata%2FStormData.csv.bz2&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; destfile&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;#39;stormdata.csv.bz2&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+storm_data &lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt; read.csv&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;stormdata.csv.bz2&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; strip.white &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;TRUE&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h1&gt;Exploring the dataframe&lt;/h1&gt;
+
+&lt;p&gt;This is a relatively big data frame with many columns. So, the first thing to do is explore it and find out the relevant columns:&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-R&quot; data-lang=&quot;R&quot;&gt;str&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;strom_data&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;&amp;#39;data.frame&amp;#39;:   902297 obs. of  37 variables:
+ $ STATE__   : num  1 1 1 1 1 1 1 1 1 1 ...
+ $ BGN_DATE  : Factor w/ 16335 levels &amp;quot;1/1/1966 0:00:00&amp;quot;,..: 6523 6523 4242 11116 2224 2224 2260 383 3980 3980 ...
+ $ BGN_TIME  : Factor w/ 3608 levels &amp;quot;00:00:00 AM&amp;quot;,..: 272 287 2705 1683 2584 3186 242 1683 3186 3186 ...
+ $ TIME_ZONE : Factor w/ 22 levels &amp;quot;ADT&amp;quot;,&amp;quot;AKS&amp;quot;,&amp;quot;AST&amp;quot;,..: 7 7 7 7 7 7 7 7 7 7 ...
+ $ COUNTY    : num  97 3 57 89 43 77 9 123 125 57 ...
+ $ COUNTYNAME: Factor w/ 29601 levels &amp;quot;&amp;quot;,&amp;quot;5NM E OF MACKINAC BRIDGE TO PRESQUE ISLE LT MI&amp;quot;,..: 13513 1873 4598 10592 4372 10094 1973 23873 24418 4598 ...
+ $ STATE     : Factor w/ 72 levels &amp;quot;AK&amp;quot;,&amp;quot;AL&amp;quot;,&amp;quot;AM&amp;quot;,..: 2 2 2 2 2 2 2 2 2 2 ...
+ $ EVTYPE    : Factor w/ 985 levels &amp;quot;   HIGH SURF ADVISORY&amp;quot;,..: 834 834 834 834 834 834 834 834 834 834 ...
+ $ BGN_RANGE : num  0 0 0 0 0 0 0 0 0 0 ...
+ $ BGN_AZI   : Factor w/ 35 levels &amp;quot;&amp;quot;,&amp;quot;  N&amp;quot;,&amp;quot; NW&amp;quot;,..: 1 1 1 1 1 1 1 1 1 1 ...
+ $ BGN_LOCATI: Factor w/ 54429 levels &amp;quot;&amp;quot;,&amp;quot; Christiansburg&amp;quot;,..: 1 1 1 1 1 1 1 1 1 1 ...
+ $ END_DATE  : Factor w/ 6663 levels &amp;quot;&amp;quot;,&amp;quot;1/1/1993 0:00:00&amp;quot;,..: 1 1 1 1 1 1 1 1 1 1 ...
+ $ END_TIME  : Factor w/ 3647 levels &amp;quot;&amp;quot;,&amp;quot; 0900CST&amp;quot;,..: 1 1 1 1 1 1 1 1 1 1 ...
+ $ COUNTY_END: num  0 0 0 0 0 0 0 0 0 0 ...
+ $ COUNTYENDN: logi  NA NA NA NA NA NA ...
+ $ END_RANGE : num  0 0 0 0 0 0 0 0 0 0 ...
+ $ END_AZI   : Factor w/ 24 levels &amp;quot;&amp;quot;,&amp;quot;E&amp;quot;,&amp;quot;ENE&amp;quot;,&amp;quot;ESE&amp;quot;,..: 1 1 1 1 1 1 1 1 1 1 ...
+ $ END_LOCATI: Factor w/ 34506 levels &amp;quot;&amp;quot;,&amp;quot; CANTON&amp;quot;,&amp;quot; TULIA&amp;quot;,..: 1 1 1 1 1 1 1 1 1 1 ...
+ $ LENGTH    : num  14 2 0.1 0 0 1.5 1.5 0 3.3 2.3 ...
+ $ WIDTH     : num  100 150 123 100 150 177 33 33 100 100 ...
+ $ F         : int  3 2 2 2 2 2 2 1 3 3 ...
+ $ MAG       : num  0 0 0 0 0 0 0 0 0 0 ...
+ $ FATALITIES: num  0 0 0 0 0 0 0 0 1 0 ...
+ $ INJURIES  : num  15 0 2 2 2 6 1 0 14 0 ...
+ $ PROPDMG   : num  25 2.5 25 2.5 2.5 2.5 2.5 2.5 25 25 ...
+ $ PROPDMGEXP: Factor w/ 19 levels &amp;quot;&amp;quot;,&amp;quot;-&amp;quot;,&amp;quot;?&amp;quot;,&amp;quot;+&amp;quot;,..: 17 17 17 17 17 17 17 17 17 17 ...
+ $ CROPDMG   : num  0 0 0 0 0 0 0 0 0 0 ...
+ $ CROPDMGEXP: Factor w/ 9 levels &amp;quot;&amp;quot;,&amp;quot;?&amp;quot;,&amp;quot;0&amp;quot;,&amp;quot;2&amp;quot;,..: 1 1 1 1 1 1 1 1 1 1 ...
+ $ WFO       : Factor w/ 542 levels &amp;quot;&amp;quot;,&amp;quot; CI&amp;quot;,&amp;quot;%SD&amp;quot;,..: 1 1 1 1 1 1 1 1 1 1 ...
+ $ STATEOFFIC: Factor w/ 250 levels &amp;quot;&amp;quot;,&amp;quot;ALABAMA, Central&amp;quot;,..: 1 1 1 1 1 1 1 1 1 1 ...
+ $ ZONENAMES : Factor w/ 25112 levels &amp;quot;&amp;quot;,&amp;quot;                                                                                                                               &amp;quot;| __truncated__,..: 1 1 1 1 1 1 1 1 1 1 ...
+ $ LATITUDE  : num  3040 3042 3340 3458 3412 ...
+ $ LONGITUDE : num  8812 8755 8742 8626 8642 ...
+ $ LATITUDE_E: num  3051 0 0 0 0 ...
+ $ LONGITUDE_: num  8806 0 0 0 0 ...
+ $ REMARKS   : Factor w/ 436781 levels &amp;quot;&amp;quot;,&amp;quot;\t&amp;quot;,&amp;quot;\t\t&amp;quot;,..: 1 1 1 1 1 1 1 1 1 1 ...
+ $ REFNUM    : num  1 2 3 4 5 6 7 8 9 10 ...
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;We want compare the event types with each other. The event type values are stored in the &lt;code&gt;EVTYPE&lt;/code&gt; column&lt;/p&gt;
+
+&lt;p&gt;To analyze the damage against human health, we need to focus on &lt;code&gt;FATALITIES&lt;/code&gt; and &lt;code&gt;INJURIES&lt;/code&gt; columns. To think about the damage agains economy we will focus on &lt;code&gt;CROPDMGEXP&lt;/code&gt;, &lt;code&gt;CROPDMG&lt;/code&gt;, &lt;code&gt;PROPDMG&lt;/code&gt; and &lt;code&gt;PROPDMGEXP&lt;/code&gt;.&lt;/p&gt;
+
+&lt;h1&gt;Event type transformations&lt;/h1&gt;
+
+&lt;p&gt;The records from NOAA storm database has 985 distincts event types.&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-R&quot; data-lang=&quot;R&quot;&gt;&lt;span class=&quot;kp&quot;&gt;length&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kp&quot;&gt;levels&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;storm_data&lt;span class=&quot;o&quot;&gt;$&lt;/span&gt;EVTYPE&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;## [1] 985
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Many of those are closely related, for example:&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-R&quot; data-lang=&quot;R&quot;&gt;hail_idx &lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;grep&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;#39;hail&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;levels&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;storm_data&lt;span class=&quot;o&quot;&gt;$&lt;/span&gt;EVTYPE&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;  ignore.case &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;TRUE&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;kp&quot;&gt;levels&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;storm_data&lt;span class=&quot;o&quot;&gt;$&lt;/span&gt;EVTYPE&lt;span class=&quot;p&quot;&gt;)[&lt;/span&gt;hail_idx&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;##  [1] &amp;quot;DEEP HAIL&amp;quot;                  &amp;quot;FUNNEL CLOUD/HAIL&amp;quot;         
+##  [3] &amp;quot;GUSTY WIND/HAIL&amp;quot;            &amp;quot;HAIL&amp;quot;                      
+##  [5] &amp;quot;HAIL 0.75&amp;quot;                  &amp;quot;HAIL 0.88&amp;quot;                 
+##  [7] &amp;quot;HAIL 075&amp;quot;                   &amp;quot;HAIL 088&amp;quot;                  
+##  [9] &amp;quot;HAIL 1.00&amp;quot;                  &amp;quot;HAIL 1.75&amp;quot;                 
+## [11] &amp;quot;HAIL 1.75)&amp;quot;                 &amp;quot;HAIL 100&amp;quot;                  
+## [13] &amp;quot;HAIL 125&amp;quot;                   &amp;quot;HAIL 150&amp;quot;                  
+## [15] &amp;quot;HAIL 175&amp;quot;                   &amp;quot;HAIL 200&amp;quot;                  
+## [17] &amp;quot;HAIL 225&amp;quot;                   &amp;quot;HAIL 275&amp;quot;                  
+## [19] &amp;quot;HAIL 450&amp;quot;                   &amp;quot;HAIL 75&amp;quot;                   
+## [21] &amp;quot;HAIL 80&amp;quot;                    &amp;quot;HAIL 88&amp;quot;                   
+## [23] &amp;quot;HAIL ALOFT&amp;quot;                 &amp;quot;HAIL DAMAGE&amp;quot;               
+## [25] &amp;quot;HAIL FLOODING&amp;quot;              &amp;quot;HAIL STORM&amp;quot;                
+## [27] &amp;quot;Hail(0.75)&amp;quot;                 &amp;quot;HAIL/ICY ROADS&amp;quot;            
+## [29] &amp;quot;HAIL/WIND&amp;quot;                  &amp;quot;HAIL/WINDS&amp;quot;                
+## [31] &amp;quot;HAILSTORM&amp;quot;                  &amp;quot;HAILSTORMS&amp;quot;                
+## [33] &amp;quot;LATE SEASON HAIL&amp;quot;           &amp;quot;MARINE HAIL&amp;quot;               
+## [35] &amp;quot;NON SEVERE HAIL&amp;quot;            &amp;quot;small hail&amp;quot;                
+## [37] &amp;quot;Small Hail&amp;quot;                 &amp;quot;SMALL HAIL&amp;quot;                
+## [39] &amp;quot;THUNDERSTORM HAIL&amp;quot;          &amp;quot;THUNDERSTORM WIND/HAIL&amp;quot;    
+## [41] &amp;quot;THUNDERSTORM WINDS HAIL&amp;quot;    &amp;quot;THUNDERSTORM WINDS/ HAIL&amp;quot;  
+## [43] &amp;quot;THUNDERSTORM WINDS/HAIL&amp;quot;    &amp;quot;THUNDERSTORM WINDSHAIL&amp;quot;    
+## [45] &amp;quot;TORNADOES, TSTM WIND, HAIL&amp;quot; &amp;quot;TSTM WIND/HAIL&amp;quot;            
+## [47] &amp;quot;WIND/HAIL&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;We should group those close related event type values in order to make the comparison practicable.&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-R&quot; data-lang=&quot;R&quot;&gt;&lt;span class=&quot;kp&quot;&gt;levels&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;storm_data&lt;span class=&quot;o&quot;&gt;$&lt;/span&gt;EVTYPE&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;tolower&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kp&quot;&gt;levels&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;storm_data&lt;span class=&quot;o&quot;&gt;$&lt;/span&gt;EVTYPE&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
+&lt;span class=&quot;kp&quot;&gt;levels&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;storm_data&lt;span class=&quot;o&quot;&gt;$&lt;/span&gt;EVTYPE&lt;span class=&quot;p&quot;&gt;)[&lt;/span&gt;&lt;span class=&quot;kp&quot;&gt;grep&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;#39;frost&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;levels&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;storm_data&lt;span class=&quot;o&quot;&gt;$&lt;/span&gt;EVTYPE&lt;span class=&quot;p&quot;&gt;))]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;#39;ice/snow&amp;#39;&lt;/span&gt;
+&lt;span class=&quot;kp&quot;&gt;levels&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;storm_data&lt;span class=&quot;o&quot;&gt;$&lt;/span&gt;EVTYPE&lt;span class=&quot;p&quot;&gt;)[&lt;/span&gt;&lt;span class=&quot;kp&quot;&gt;grep&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;#39;freez&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;levels&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;storm_data&lt;span class=&quot;o&quot;&gt;$&lt;/span&gt;EVTYPE&lt;span class=&quot;p&quot;&gt;))]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;#39;ice/snow&amp;#39;&lt;/span&gt;
+&lt;span class=&quot;kp&quot;&gt;levels&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;storm_data&lt;span class=&quot;o&quot;&gt;$&lt;/span&gt;EVTYPE&lt;span class=&quot;p&quot;&gt;)[&lt;/span&gt;&lt;span class=&quot;kp&quot;&gt;grep&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;#39;blizzard&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;levels&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;storm_data&lt;span class=&quot;o&quot;&gt;$&lt;/span&gt;EVTYPE&lt;span class=&quot;p&quot;&gt;))]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;#39;ice/snow&amp;#39;&lt;/span&gt;
+&lt;span class=&quot;kp&quot;&gt;levels&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;storm_data&lt;span class=&quot;o&quot;&gt;$&lt;/span&gt;EVTYPE&lt;span class=&quot;p&quot;&gt;)[&lt;/span&gt;&lt;span class=&quot;kp&quot;&gt;grep&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;#39;fog&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;levels&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;storm_data&lt;span class=&quot;o&quot;&gt;$&lt;/span&gt;EVTYPE&lt;span class=&quot;p&quot;&gt;))]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;#39;fog/smoke&amp;#39;&lt;/span&gt;
+&lt;span class=&quot;kp&quot;&gt;levels&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;storm_data&lt;span class=&quot;o&quot;&gt;$&lt;/span&gt;EVTYPE&lt;span class=&quot;p&quot;&gt;)[&lt;/span&gt;&lt;span class=&quot;kp&quot;&gt;grep&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;#39;smoke&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;levels&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;storm_data&lt;span class=&quot;o&quot;&gt;$&lt;/span&gt;EVTYPE&lt;span class=&quot;p&quot;&gt;))]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;#39;fog/smoke&amp;#39;&lt;/span&gt;
+&lt;span class=&quot;kp&quot;&gt;levels&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;storm_data&lt;span class=&quot;o&quot;&gt;$&lt;/span&gt;EVTYPE&lt;span class=&quot;p&quot;&gt;)[&lt;/span&gt;&lt;span class=&quot;kp&quot;&gt;grep&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;#39;snow&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;levels&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;storm_data&lt;span class=&quot;o&quot;&gt;$&lt;/span&gt;EVTYPE&lt;span class=&quot;p&quot;&gt;))]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;#39;ice/snow&amp;#39;&lt;/span&gt;
+&lt;span class=&quot;kp&quot;&gt;levels&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;storm_data&lt;span class=&quot;o&quot;&gt;$&lt;/span&gt;EVTYPE&lt;span class=&quot;p&quot;&gt;)[&lt;/span&gt;&lt;span class=&quot;kp&quot;&gt;grep&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;#39;ice&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;levels&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;storm_data&lt;span class=&quot;o&quot;&gt;$&lt;/span&gt;EVTYPE&lt;span class=&quot;p&quot;&gt;))]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;#39;ice/snow&amp;#39;&lt;/span&gt;
+&lt;span class=&quot;kp&quot;&gt;levels&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;storm_data&lt;span class=&quot;o&quot;&gt;$&lt;/span&gt;EVTYPE&lt;span class=&quot;p&quot;&gt;)[&lt;/span&gt;&lt;span class=&quot;kp&quot;&gt;grep&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;#39;dust&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;levels&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;storm_data&lt;span class=&quot;o&quot;&gt;$&lt;/span&gt;EVTYPE&lt;span class=&quot;p&quot;&gt;))]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;#39;dustStorm&amp;#39;&lt;/span&gt;
+&lt;span class=&quot;kp&quot;&gt;levels&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;storm_data&lt;span class=&quot;o&quot;&gt;$&lt;/span&gt;EVTYPE&lt;span class=&quot;p&quot;&gt;)[&lt;/span&gt;&lt;span class=&quot;kp&quot;&gt;grep&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;#39;storm&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;levels&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;storm_data&lt;span class=&quot;o&quot;&gt;$&lt;/span&gt;EVTYPE&lt;span class=&quot;p&quot;&gt;))]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;#39;storm&amp;#39;&lt;/span&gt;
+&lt;span class=&quot;kp&quot;&gt;levels&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;storm_data&lt;span class=&quot;o&quot;&gt;$&lt;/span&gt;EVTYPE&lt;span class=&quot;p&quot;&gt;)[&lt;/span&gt;&lt;span class=&quot;kp&quot;&gt;grep&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;#39;volcanic&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;levels&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;storm_data&lt;span class=&quot;o&quot;&gt;$&lt;/span&gt;EVTYPE&lt;span class=&quot;p&quot;&gt;))]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;#39;volcano&amp;#39;&lt;/span&gt;
+&lt;span class=&quot;kp&quot;&gt;levels&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;storm_data&lt;span class=&quot;o&quot;&gt;$&lt;/span&gt;EVTYPE&lt;span class=&quot;p&quot;&gt;)[&lt;/span&gt;&lt;span class=&quot;kp&quot;&gt;grep&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;#39;urban&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;levels&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;storm_data&lt;span class=&quot;o&quot;&gt;$&lt;/span&gt;EVTYPE&lt;span class=&quot;p&quot;&gt;))]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;#39;urban stream&amp;#39;&lt;/span&gt;
+&lt;span class=&quot;kp&quot;&gt;levels&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;storm_data&lt;span class=&quot;o&quot;&gt;$&lt;/span&gt;EVTYPE&lt;span class=&quot;p&quot;&gt;)[&lt;/span&gt;&lt;span class=&quot;kp&quot;&gt;grep&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;#39;wet&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;levels&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;storm_data&lt;span class=&quot;o&quot;&gt;$&lt;/span&gt;EVTYPE&lt;span class=&quot;p&quot;&gt;))]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;#39;temperature and wet&amp;#39;&lt;/span&gt;
+&lt;span class=&quot;kp&quot;&gt;levels&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;storm_data&lt;span class=&quot;o&quot;&gt;$&lt;/span&gt;EVTYPE&lt;span class=&quot;p&quot;&gt;)[&lt;/span&gt;&lt;span class=&quot;kp&quot;&gt;grep&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;#39;wind&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;levels&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;storm_data&lt;span class=&quot;o&quot;&gt;$&lt;/span&gt;EVTYPE&lt;span class=&quot;p&quot;&gt;))]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;#39;wind/typhoon/tornado/hurricane&amp;#39;&lt;/span&gt;
+&lt;span class=&quot;kp&quot;&gt;levels&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;storm_data&lt;span class=&quot;o&quot;&gt;$&lt;/span&gt;EVTYPE&lt;span class=&quot;p&quot;&gt;)[&lt;/span&gt;&lt;span class=&quot;kp&quot;&gt;grep&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;#39;tornad&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;levels&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;storm_data&lt;span class=&quot;o&quot;&gt;$&lt;/span&gt;EVTYPE&lt;span class=&quot;p&quot;&gt;))]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;#39;wind/typhoon/tornado/hurricane&amp;#39;&lt;/span&gt;
+&lt;span class=&quot;kp&quot;&gt;levels&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;storm_data&lt;span class=&quot;o&quot;&gt;$&lt;/span&gt;EVTYPE&lt;span class=&quot;p&quot;&gt;)[&lt;/span&gt;&lt;span class=&quot;kp&quot;&gt;grep&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;#39;typhoon&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;levels&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;storm_data&lt;span class=&quot;o&quot;&gt;$&lt;/span&gt;EVTYPE&lt;span class=&quot;p&quot;&gt;))]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;#39;wind/typhoon/tornado/hurricane&amp;#39;&lt;/span&gt;
+&lt;span class=&quot;kp&quot;&gt;levels&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;storm_data&lt;span class=&quot;o&quot;&gt;$&lt;/span&gt;EVTYPE&lt;span class=&quot;p&quot;&gt;)[&lt;/span&gt;&lt;span class=&quot;kp&quot;&gt;grep&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;#39;hurricane&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;levels&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;storm_data&lt;span class=&quot;o&quot;&gt;$&lt;/span&gt;EVTYPE&lt;span class=&quot;p&quot;&gt;))]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;#39;wind/typhoon/tornado/hurricane&amp;#39;&lt;/span&gt;
+&lt;span class=&quot;kp&quot;&gt;levels&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;storm_data&lt;span class=&quot;o&quot;&gt;$&lt;/span&gt;EVTYPE&lt;span class=&quot;p&quot;&gt;)[&lt;/span&gt;&lt;span class=&quot;kp&quot;&gt;grep&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;#39;dry&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;levels&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;storm_data&lt;span class=&quot;o&quot;&gt;$&lt;/span&gt;EVTYPE&lt;span class=&quot;p&quot;&gt;))]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;#39;temperature and wet&amp;#39;&lt;/span&gt;
+&lt;span class=&quot;kp&quot;&gt;levels&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;storm_data&lt;span class=&quot;o&quot;&gt;$&lt;/span&gt;EVTYPE&lt;span class=&quot;p&quot;&gt;)[&lt;/span&gt;&lt;span class=&quot;kp&quot;&gt;grep&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;#39;warm&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;levels&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;storm_data&lt;span class=&quot;o&quot;&gt;$&lt;/span&gt;EVTYPE&lt;span class=&quot;p&quot;&gt;))]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;#39;temperature and wet&amp;#39;&lt;/span&gt;
+&lt;span class=&quot;kp&quot;&gt;levels&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;storm_data&lt;span class=&quot;o&quot;&gt;$&lt;/span&gt;EVTYPE&lt;span class=&quot;p&quot;&gt;)[&lt;/span&gt;&lt;span class=&quot;kp&quot;&gt;grep&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;#39;dry&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;levels&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;storm_data&lt;span class=&quot;o&quot;&gt;$&lt;/span&gt;EVTYPE&lt;span class=&quot;p&quot;&gt;))]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;#39;temperature and wet&amp;#39;&lt;/span&gt;
+&lt;span class=&quot;kp&quot;&gt;levels&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;storm_data&lt;span class=&quot;o&quot;&gt;$&lt;/span&gt;EVTYPE&lt;span class=&quot;p&quot;&gt;)[&lt;/span&gt;&lt;span class=&quot;kp&quot;&gt;grep&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;#39;tstm&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;levels&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;storm_data&lt;span class=&quot;o&quot;&gt;$&lt;/span&gt;EVTYPE&lt;span class=&quot;p&quot;&gt;))]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;#39;storm&amp;#39;&lt;/span&gt;
+&lt;span class=&quot;kp&quot;&gt;levels&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;storm_data&lt;span class=&quot;o&quot;&gt;$&lt;/span&gt;EVTYPE&lt;span class=&quot;p&quot;&gt;)[&lt;/span&gt;&lt;span class=&quot;kp&quot;&gt;grep&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;#39;cold&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;levels&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;storm_data&lt;span class=&quot;o&quot;&gt;$&lt;/span&gt;EVTYPE&lt;span class=&quot;p&quot;&gt;))]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;#39;temperature and wet&amp;#39;&lt;/span&gt;
+&lt;span class=&quot;kp&quot;&gt;levels&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;storm_data&lt;span class=&quot;o&quot;&gt;$&lt;/span&gt;EVTYPE&lt;span class=&quot;p&quot;&gt;)[&lt;/span&gt;&lt;span class=&quot;kp&quot;&gt;grep&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;#39;cool&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;levels&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;storm_data&lt;span class=&quot;o&quot;&gt;$&lt;/span&gt;EVTYPE&lt;span class=&quot;p&quot;&gt;))]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;#39;temperature and wet&amp;#39;&lt;/span&gt;
+&lt;span class=&quot;kp&quot;&gt;levels&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;storm_data&lt;span class=&quot;o&quot;&gt;$&lt;/span&gt;EVTYPE&lt;span class=&quot;p&quot;&gt;)[&lt;/span&gt;&lt;span class=&quot;kp&quot;&gt;grep&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;#39;heat&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;levels&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;storm_data&lt;span class=&quot;o&quot;&gt;$&lt;/span&gt;EVTYPE&lt;span class=&quot;p&quot;&gt;))]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;#39;temperature and wet&amp;#39;&lt;/span&gt;
+&lt;span class=&quot;kp&quot;&gt;levels&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;storm_data&lt;span class=&quot;o&quot;&gt;$&lt;/span&gt;EVTYPE&lt;span class=&quot;p&quot;&gt;)[&lt;/span&gt;&lt;span class=&quot;kp&quot;&gt;grep&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;#39;hypotherm&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;levels&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;storm_data&lt;span class=&quot;o&quot;&gt;$&lt;/span&gt;EVTYPE&lt;span class=&quot;p&quot;&gt;))]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;#39;hypothermia&amp;#39;&lt;/span&gt;
+&lt;span class=&quot;kp&quot;&gt;levels&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;storm_data&lt;span class=&quot;o&quot;&gt;$&lt;/span&gt;EVTYPE&lt;span class=&quot;p&quot;&gt;)[&lt;/span&gt;&lt;span class=&quot;kp&quot;&gt;grep&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;#39;hail&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;levels&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;storm_data&lt;span class=&quot;o&quot;&gt;$&lt;/span&gt;EVTYPE&lt;span class=&quot;p&quot;&gt;))]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;#39;hail&amp;#39;&lt;/span&gt;
+&lt;span class=&quot;kp&quot;&gt;levels&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;storm_data&lt;span class=&quot;o&quot;&gt;$&lt;/span&gt;EVTYPE&lt;span class=&quot;p&quot;&gt;)[&lt;/span&gt;&lt;span class=&quot;kp&quot;&gt;grep&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;#39;hot&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;levels&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;storm_data&lt;span class=&quot;o&quot;&gt;$&lt;/span&gt;EVTYPE&lt;span class=&quot;p&quot;&gt;))]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;#39;temperature and wet&amp;#39;&lt;/span&gt;
+&lt;span class=&quot;kp&quot;&gt;levels&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;storm_data&lt;span class=&quot;o&quot;&gt;$&lt;/span&gt;EVTYPE&lt;span class=&quot;p&quot;&gt;)[&lt;/span&gt;&lt;span class=&quot;kp&quot;&gt;grep&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;#39;temperature&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;levels&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;storm_data&lt;span class=&quot;o&quot;&gt;$&lt;/span&gt;EVTYPE&lt;span class=&quot;p&quot;&gt;))]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;#39;temperature and wet&amp;#39;&lt;/span&gt;
+&lt;span class=&quot;kp&quot;&gt;levels&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;storm_data&lt;span class=&quot;o&quot;&gt;$&lt;/span&gt;EVTYPE&lt;span class=&quot;p&quot;&gt;)[&lt;/span&gt;&lt;span class=&quot;kp&quot;&gt;grep&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;#39;thunder&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;levels&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;storm_data&lt;span class=&quot;o&quot;&gt;$&lt;/span&gt;EVTYPE&lt;span class=&quot;p&quot;&gt;))]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;#39;storm&amp;#39;&lt;/span&gt;
+&lt;span class=&quot;kp&quot;&gt;levels&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;storm_data&lt;span class=&quot;o&quot;&gt;$&lt;/span&gt;EVTYPE&lt;span class=&quot;p&quot;&gt;)[&lt;/span&gt;&lt;span class=&quot;kp&quot;&gt;grep&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;#39;winter&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;levels&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;storm_data&lt;span class=&quot;o&quot;&gt;$&lt;/span&gt;EVTYPE&lt;span class=&quot;p&quot;&gt;))]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;#39;winter&amp;#39;&lt;/span&gt;
+&lt;span class=&quot;kp&quot;&gt;levels&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;storm_data&lt;span class=&quot;o&quot;&gt;$&lt;/span&gt;EVTYPE&lt;span class=&quot;p&quot;&gt;)[&lt;/span&gt;&lt;span class=&quot;kp&quot;&gt;grep&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;#39;flood&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;levels&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;storm_data&lt;span class=&quot;o&quot;&gt;$&lt;/span&gt;EVTYPE&lt;span class=&quot;p&quot;&gt;))]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;#39;flood&amp;#39;&lt;/span&gt;
+&lt;span class=&quot;kp&quot;&gt;levels&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;storm_data&lt;span class=&quot;o&quot;&gt;$&lt;/span&gt;EVTYPE&lt;span class=&quot;p&quot;&gt;)[&lt;/span&gt;&lt;span class=&quot;kp&quot;&gt;grep&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;#39;waterspout&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;levels&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;storm_data&lt;span class=&quot;o&quot;&gt;$&lt;/span&gt;EVTYPE&lt;span class=&quot;p&quot;&gt;))]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;#39;waterspout&amp;#39;&lt;/span&gt;
+&lt;span class=&quot;kp&quot;&gt;levels&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;storm_data&lt;span class=&quot;o&quot;&gt;$&lt;/span&gt;EVTYPE&lt;span class=&quot;p&quot;&gt;)[&lt;/span&gt;&lt;span class=&quot;kp&quot;&gt;grep&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;#39;fire&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;levels&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;storm_data&lt;span class=&quot;o&quot;&gt;$&lt;/span&gt;EVTYPE&lt;span class=&quot;p&quot;&gt;))]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;#39;fire&amp;#39;&lt;/span&gt;
+&lt;span class=&quot;kp&quot;&gt;levels&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;storm_data&lt;span class=&quot;o&quot;&gt;$&lt;/span&gt;EVTYPE&lt;span class=&quot;p&quot;&gt;)[&lt;/span&gt;&lt;span class=&quot;kp&quot;&gt;grep&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;#39;rip current&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;levels&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;storm_data&lt;span class=&quot;o&quot;&gt;$&lt;/span&gt;EVTYPE&lt;span class=&quot;p&quot;&gt;))]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;#39;seas&amp;#39;&lt;/span&gt;
+&lt;span class=&quot;kp&quot;&gt;levels&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;storm_data&lt;span class=&quot;o&quot;&gt;$&lt;/span&gt;EVTYPE&lt;span class=&quot;p&quot;&gt;)[&lt;/span&gt;&lt;span class=&quot;kp&quot;&gt;grep&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;#39;seas&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;levels&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;storm_data&lt;span class=&quot;o&quot;&gt;$&lt;/span&gt;EVTYPE&lt;span class=&quot;p&quot;&gt;))]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;#39;seas&amp;#39;&lt;/span&gt;
+&lt;span class=&quot;kp&quot;&gt;levels&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;storm_data&lt;span class=&quot;o&quot;&gt;$&lt;/span&gt;EVTYPE&lt;span class=&quot;p&quot;&gt;)[&lt;/span&gt;&lt;span class=&quot;kp&quot;&gt;grep&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;#39;surf&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;levels&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;storm_data&lt;span class=&quot;o&quot;&gt;$&lt;/span&gt;EVTYPE&lt;span class=&quot;p&quot;&gt;))]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;#39;seas&amp;#39;&lt;/span&gt;
+&lt;span class=&quot;kp&quot;&gt;levels&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;storm_data&lt;span class=&quot;o&quot;&gt;$&lt;/span&gt;EVTYPE&lt;span class=&quot;p&quot;&gt;)[&lt;/span&gt;&lt;span class=&quot;kp&quot;&gt;grep&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;#39;marine&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;levels&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;storm_data&lt;span class=&quot;o&quot;&gt;$&lt;/span&gt;EVTYPE&lt;span class=&quot;p&quot;&gt;))]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;#39;seas&amp;#39;&lt;/span&gt;
+&lt;span class=&quot;kp&quot;&gt;levels&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;storm_data&lt;span class=&quot;o&quot;&gt;$&lt;/span&gt;EVTYPE&lt;span class=&quot;p&quot;&gt;)[&lt;/span&gt;&lt;span class=&quot;kp&quot;&gt;grep&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;#39;wave&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;levels&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;storm_data&lt;span class=&quot;o&quot;&gt;$&lt;/span&gt;EVTYPE&lt;span class=&quot;p&quot;&gt;))]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;#39;seas&amp;#39;&lt;/span&gt;
+&lt;span class=&quot;kp&quot;&gt;levels&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;storm_data&lt;span class=&quot;o&quot;&gt;$&lt;/span&gt;EVTYPE&lt;span class=&quot;p&quot;&gt;)[&lt;/span&gt;&lt;span class=&quot;kp&quot;&gt;grep&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;#39;lightning&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;levels&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;storm_data&lt;span class=&quot;o&quot;&gt;$&lt;/span&gt;EVTYPE&lt;span class=&quot;p&quot;&gt;))]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;#39;lightning&amp;#39;&lt;/span&gt;
+&lt;span class=&quot;kp&quot;&gt;levels&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;storm_data&lt;span class=&quot;o&quot;&gt;$&lt;/span&gt;EVTYPE&lt;span class=&quot;p&quot;&gt;)[&lt;/span&gt;&lt;span class=&quot;kp&quot;&gt;grep&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;#39;rain&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;levels&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;storm_data&lt;span class=&quot;o&quot;&gt;$&lt;/span&gt;EVTYPE&lt;span class=&quot;p&quot;&gt;))]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;#39;rain&amp;#39;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;There are also event types that doesn’t tell anything about an event type, for example:&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-R&quot; data-lang=&quot;R&quot;&gt;smridx &lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;grep&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;#39;summary&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;levels&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;storm_data&lt;span class=&quot;o&quot;&gt;$&lt;/span&gt;EVTYPE&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;  ignore.case &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;TRUE&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;kp&quot;&gt;levels&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;storm_data&lt;span class=&quot;o&quot;&gt;$&lt;/span&gt;EVTYPE&lt;span class=&quot;p&quot;&gt;)[&lt;/span&gt;smridx&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;##  [1] &amp;quot;summary august 10&amp;quot;      &amp;quot;summary august 11&amp;quot;     
+##  [3] &amp;quot;summary august 17&amp;quot;      &amp;quot;summary august 2-3&amp;quot;    
+##  [5] &amp;quot;summary august 21&amp;quot;      &amp;quot;summary august 28&amp;quot;     
+##  [7] &amp;quot;summary august 4&amp;quot;       &amp;quot;summary august 7&amp;quot;      
+##  [9] &amp;quot;summary august 9&amp;quot;       &amp;quot;summary jan 17&amp;quot;        
+## [11] &amp;quot;summary july 23-24&amp;quot;     &amp;quot;summary june 18-19&amp;quot;    
+## [13] &amp;quot;summary june 5-6&amp;quot;       &amp;quot;summary june 6&amp;quot;        
+## [15] &amp;quot;summary of april 12&amp;quot;    &amp;quot;summary of april 13&amp;quot;   
+## [17] &amp;quot;summary of april 21&amp;quot;    &amp;quot;summary of april 27&amp;quot;   
+## [19] &amp;quot;summary of april 3rd&amp;quot;   &amp;quot;summary of august 1&amp;quot;   
+## [21] &amp;quot;summary of july 11&amp;quot;     &amp;quot;summary of july 2&amp;quot;     
+## [23] &amp;quot;summary of july 22&amp;quot;     &amp;quot;summary of july 26&amp;quot;    
+## [25] &amp;quot;summary of july 29&amp;quot;     &amp;quot;summary of july 3&amp;quot;     
+## [27] &amp;quot;summary of june 10&amp;quot;     &amp;quot;summary of june 11&amp;quot;    
+## [29] &amp;quot;summary of june 12&amp;quot;     &amp;quot;summary of june 13&amp;quot;    
+## [31] &amp;quot;summary of june 15&amp;quot;     &amp;quot;summary of june 16&amp;quot;    
+## [33] &amp;quot;summary of june 18&amp;quot;     &amp;quot;summary of june 23&amp;quot;    
+## [35] &amp;quot;summary of june 24&amp;quot;     &amp;quot;summary of june 3&amp;quot;     
+## [37] &amp;quot;summary of june 30&amp;quot;     &amp;quot;summary of june 4&amp;quot;     
+## [39] &amp;quot;summary of june 6&amp;quot;      &amp;quot;summary of march 14&amp;quot;   
+## [41] &amp;quot;summary of march 23&amp;quot;    &amp;quot;summary of march 24&amp;quot;   
+## [43] &amp;quot;summary of march 24-25&amp;quot; &amp;quot;summary of march 27&amp;quot;   
+## [45] &amp;quot;summary of march 29&amp;quot;    &amp;quot;summary of may 10&amp;quot;     
+## [47] &amp;quot;summary of may 13&amp;quot;      &amp;quot;summary of may 14&amp;quot;     
+## [49] &amp;quot;summary of may 22&amp;quot;      &amp;quot;summary of may 22 am&amp;quot;  
+## [51] &amp;quot;summary of may 22 pm&amp;quot;   &amp;quot;summary of may 26 am&amp;quot;  
+## [53] &amp;quot;summary of may 26 pm&amp;quot;   &amp;quot;summary of may 31 am&amp;quot;  
+## [55] &amp;quot;summary of may 31 pm&amp;quot;   &amp;quot;summary of may 9-10&amp;quot;   
+## [57] &amp;quot;summary sept. 25-26&amp;quot;    &amp;quot;summary september 20&amp;quot;  
+## [59] &amp;quot;summary september 23&amp;quot;   &amp;quot;summary september 3&amp;quot;   
+## [61] &amp;quot;summary september 4&amp;quot;    &amp;quot;summary: nov. 16&amp;quot;      
+## [63] &amp;quot;summary: nov. 6-7&amp;quot;      &amp;quot;summary: oct. 20-21&amp;quot;   
+## [65] &amp;quot;summary: october 31&amp;quot;    &amp;quot;summary: sept. 18&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;The records with thoses values as event type are useless for the answer we want, so it`s reasonable  removing them from  data frame.&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-R&quot; data-lang=&quot;R&quot;&gt;storm_data &lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt; storm_data&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;!&lt;/span&gt;&lt;span class=&quot;kp&quot;&gt;grepl&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;#39;summary&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; storm_data&lt;span class=&quot;o&quot;&gt;$&lt;/span&gt;EVTYPE&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
+storm_data &lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;droplevels&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;storm_data&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; 
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Now, there are 108 distinct event type in the storm_data data frame.&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-R&quot; data-lang=&quot;R&quot;&gt;&lt;span class=&quot;kp&quot;&gt;length&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kp&quot;&gt;levels&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;storm_data&lt;span class=&quot;o&quot;&gt;$&lt;/span&gt;EVTYPE&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;length(levels(storm_data$EVTYPE))
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h1&gt;Analysis of human health damage by event type&lt;/h1&gt;
+
+&lt;p&gt;Let’s arrange the data records now, grouping by the event type and ordering by number of fatalities, and showing the number of injuries and number of fatalities.&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-R&quot; data-lang=&quot;R&quot;&gt;fatalities_injuries_by_event &lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt; storm_data  &lt;span class=&quot;o&quot;&gt;%&amp;gt;%&lt;/span&gt; 
+  group_by&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;EVTYPE&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;%&amp;gt;%&lt;/span&gt; 
+  summarize&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;injuries&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;kp&quot;&gt;sum&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;INJURIES&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt; fatalities&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;kp&quot;&gt;sum&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;FATALITIES&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;%&amp;gt;%&lt;/span&gt;
+  arrange&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;desc&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;fatalities&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; injuries&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
+
+fatalities_injuries_by_event
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;## Source: local data frame [108 x 3]
+## 
+##                            EVTYPE injuries fatalities
+##                            (fctr)    (dbl)      (dbl)
+## 1  wind/typhoon/tornado/hurricane   101741       7004
+## 2             temperature and wet     9550       3402
+## 3                           flood     8602       1524
+## 4                       lightning     5231        817
+## 5                            seas      797        760
+## 6                           storm     4260        522
+## 7                        ice/snow     4166        379
+## 8                       avalanche      170        224
+## 9                            rain      280        100
+## 10                           fire     1608         90
+## ..                            ...      ...        ...
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;As we can see, the “wind/typhoon/tornado/hurricane” event type has a much higher number of injuries then other event types. That is suspicious. Let`s investigate a bit more.&lt;/p&gt;
+
+&lt;h2&gt;Arranging that by decades&lt;/h2&gt;
+
+&lt;p&gt;Let’s see how these records are arranged by decades, focusing only on the top event types.&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-R&quot; data-lang=&quot;R&quot;&gt;top_evtypes &lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt; fatalities_injuries_by_event&lt;span class=&quot;o&quot;&gt;$&lt;/span&gt;EVTYPE&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;7&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
+n_storm_data &lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt; storm_data&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;storm_data&lt;span class=&quot;o&quot;&gt;$&lt;/span&gt;EVTYPE &lt;span class=&quot;o&quot;&gt;%in%&lt;/span&gt; top_evtypes&lt;span class=&quot;p&quot;&gt;,]&lt;/span&gt;
+n_storm_data&lt;span class=&quot;o&quot;&gt;$&lt;/span&gt;YEAR &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;as.numeric&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kp&quot;&gt;format&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kp&quot;&gt;as.Date&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;n_storm_data&lt;span class=&quot;o&quot;&gt;$&lt;/span&gt;BGN_DATE&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; format &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;%m/%d/%Y %H:%M:%S&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;#39;%Y&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
+n_storm_data&lt;span class=&quot;o&quot;&gt;$&lt;/span&gt;DECADE &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;as.integer&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;n_storm_data&lt;span class=&quot;o&quot;&gt;$&lt;/span&gt;YEAR &lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;10&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;10&lt;/span&gt;
+
+fatalities_injuries_by_event_decade &lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt; n_storm_data  &lt;span class=&quot;o&quot;&gt;%&amp;gt;%&lt;/span&gt; 
+       group_by&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;EVTYPE&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; DECADE&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;%&amp;gt;%&lt;/span&gt; 
+       summarize&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;injuries&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;kp&quot;&gt;sum&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;INJURIES&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt; fatalities&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;kp&quot;&gt;sum&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;FATALITIES&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;%&amp;gt;%&lt;/span&gt;
+       arrange&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;desc&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;fatalities&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; injuries&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Now, let’s reshape data for better visualization. Firstly injuries data.&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-R&quot; data-lang=&quot;R&quot;&gt;melted_injuries_by_event_decade &lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt; melt&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;fatalities_injuries_by_event_decade&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;c&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;EVTYPE&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;#39;DECADE&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;#39;injuries&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+injuries_by_event_decade_wide &lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt; dcast&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;melted_injuries_by_event_decade&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; EVTYPE &lt;span class=&quot;o&quot;&gt;~&lt;/span&gt; DECADE&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+injuries_by_event_decade_wide
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;##                           EVTYPE  1950  1960  1970  1980  1990  2000 2010
+## 1                           seas    NA    NA    NA    NA   192   502  103
+## 2                          flood    NA    NA    NA    NA  7473   773  356
+## 3                      lightning    NA    NA    NA    NA  2238  2617  376
+## 4 wind/typhoon/tornado/hurricane 14470 17265 21640 13232 15768 12407 6959
+## 5            temperature and wet    NA    NA    NA    NA  4598  4101  851
+## 6                       ice/snow    NA    NA    NA    NA  3707   440   19
+## 7                          storm    NA    NA    NA    NA  2122  1421  717
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;and fatalities data:&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-R&quot; data-lang=&quot;R&quot;&gt;melted_fatalities_by_event_decade &lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt; melt&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;fatalities_injuries_by_event_decade&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;c&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;EVTYPE&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;#39;DECADE&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;#39;fatalities&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+fatalities_by_event_decade_wide &lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt; dcast&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;melted_fatalities_by_event_decade&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; EVTYPE &lt;span class=&quot;o&quot;&gt;~&lt;/span&gt; DECADE&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+fatalities_by_event_decade_wide
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;##                           EVTYPE 1950 1960 1970 1980 1990 2000 2010
+## 1                           seas   NA   NA   NA   NA  165  489  106
+## 2                          flood   NA   NA   NA   NA  654  635  235
+## 3                      lightning   NA   NA   NA   NA  351  411   55
+## 4 wind/typhoon/tornado/hurricane 1419  942  998  699 1074 1157  715
+## 5            temperature and wet   NA   NA   NA   NA 2117 1103  182
+## 6                       ice/snow   NA   NA   NA   NA  294   81    4
+## 7                          storm   NA   NA   NA   NA  215  224   83
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;We can see that there are data only about wind/typhoon/tornado/hurricane event types before de 1990s. &lt;/p&gt;
+
+&lt;p&gt;This fact makes the comparison unfair. We should consider only data from after the 1990s (more specifically 1993, but we will omit this analysis for simplicity))&lt;/p&gt;
+
+&lt;p&gt;So, let us subset the data frame.&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-R&quot; data-lang=&quot;R&quot;&gt;storm_data&lt;span class=&quot;o&quot;&gt;$&lt;/span&gt;YEAR &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;as.numeric&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kp&quot;&gt;format&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kp&quot;&gt;as.Date&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;storm_data&lt;span class=&quot;o&quot;&gt;$&lt;/span&gt;BGN_DATE&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; format &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;%m/%d/%Y %H:%M:%S&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;#39;%Y&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
+new_storm_data &lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt; storm_data&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;storm_data&lt;span class=&quot;o&quot;&gt;$&lt;/span&gt;YEAR&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;1993&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,]&lt;/span&gt; 
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;And now, let`s see a fair comparison.&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-R&quot; data-lang=&quot;R&quot;&gt;fatalities_injuries_by_event &lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt; new_storm_data  &lt;span class=&quot;o&quot;&gt;%&amp;gt;%&lt;/span&gt; 
+  group_by&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;EVTYPE&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;%&amp;gt;%&lt;/span&gt; 
+  summarize&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;injuries&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;kp&quot;&gt;sum&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;INJURIES&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt; fatalities&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;kp&quot;&gt;sum&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;FATALITIES&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;%&amp;gt;%&lt;/span&gt;
+  arrange&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;desc&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;fatalities&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; injuries&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
+
+fatalities_injuries_by_event
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;## Source: local data frame [104 x 3]
+## 
+##                            EVTYPE injuries fatalities
+##                            (fctr)    (dbl)      (dbl)
+## 1             temperature and wet     9544       3378
+## 2  wind/typhoon/tornado/hurricane    29392       2633
+## 3                           flood     8560       1471
+## 4                       lightning     5117        795
+## 5                            seas      796        758
+## 6                           storm     4025        477
+## 7                        ice/snow     3597        333
+## 8                       avalanche      170        224
+## 9                            rain      266        100
+## 10                           fire     1458         87
+## ..                            ...      ...        ...
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Well, those are the most harmful to human health event types from 1993 to today.&lt;/p&gt;
+</description>
+        <pubDate>Wed, 06 Apr 2016 13:09:02 -0300</pubDate>
+        <link>http://du2x.github.io/data-science/r/2016/04/06/most-harmful-camalities-types.html</link>
+        <guid isPermaLink="true">http://du2x.github.io/data-science/r/2016/04/06/most-harmful-camalities-types.html</guid>
+        
+        
+        <category>data-science</category>
+        
+        <category>r</category>
+        
+      </item>
+    
+      <item>
+        <title>Authentication with JWT</title>
+        <description>&lt;p&gt;Last month I was searching about the best way to implement authentication/authorization in a new service. Then I found JWT. At a first glance, I feel confused about the way it works, but after reading a few articles and examples, authentication with JWT showed up beautiful and simple so that I decided to write about it as the first post of my blog.&lt;/p&gt;
+
+&lt;h1&gt;JWT Definition&lt;/h1&gt;
+
+&lt;p&gt;Let&amp;#39;s start with JWT definition, from Wikipedia:&lt;/p&gt;
 
 &lt;blockquote&gt;
-  &lt;p&gt;JSON Web Token (JWT) is a JSON-based open standard (RFC 7519) for passing claims between parties
+&lt;p&gt;JSON Web Token (JWT) is a JSON-based open standard (RFC 7519) for passing claims between parties
 in web application environment. The tokens are designed to be compact, URL-safe and usable especially 
 in web browser single sign-on (SSO) context.&lt;/p&gt;
 &lt;/blockquote&gt;
 
-&lt;p&gt;From that, we can assume JWT can be used as authentication mechanism and for secure message interchange.&lt;/p&gt;
+&lt;p&gt;From that, we can assume JWT can be used as part of a authentication mechanism or for secure message interchange. &lt;/p&gt;
 
 &lt;p&gt;Another good definition comes from http://jwt.io:&lt;/p&gt;
 
 &lt;blockquote&gt;
-  &lt;p&gt;JSON Web Tokens are an open, industry standard RFC 7519 method for representing claims 
+&lt;p&gt;JSON Web Tokens are an open, industry standard RFC 7519 method for representing claims 
 securely between two parties.&lt;/p&gt;
 &lt;/blockquote&gt;
 
-&lt;h2 id=&quot;jwt-structure&quot;&gt;JWT Structure&lt;/h2&gt;
+&lt;p&gt;What are those claims and how it can be represented securely between two parties? Let`s see.&lt;/p&gt;
+
+&lt;h1&gt;JWT Structure&lt;/h1&gt;
 
 &lt;p&gt;To understand better about that, we should take a look on JWT structure:&lt;/p&gt;
 
 &lt;p&gt;JSON Web Tokens consist of a string with three parts separated by dots (.), which are:&lt;/p&gt;
 
 &lt;ul&gt;
-  &lt;li&gt;Header&lt;/li&gt;
-  &lt;li&gt;Payload&lt;/li&gt;
-  &lt;li&gt;Signature&lt;/li&gt;
+&lt;li&gt;Header&lt;/li&gt;
+&lt;li&gt;Payload&lt;/li&gt;
+&lt;li&gt;Signature&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;p&gt;The &lt;strong&gt;header&lt;/strong&gt; consists of two parts: the type of token (witch is JWT) and the hashing algorithm, witch can be a symetric or asymetric hashing algorithm.&lt;/p&gt;
 
-&lt;p&gt;For example&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-	&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;alg&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;HS256&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-	&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;typ&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;JWT&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;The second part of the token is the &lt;strong&gt;payload&lt;/strong&gt;, which contains the claims. Claims are statements about an entity (typically, the user) and additional metadata. There are a set of predefined claims, like ‘iat’ (issued at), which are not mandatory but recommended,  and custom claims, witch can whatever you want, like ‘username’, ‘usermail’, ‘permissions’ and others.&lt;/p&gt;
+&lt;p&gt;For example
+&lt;code&gt;
+    {
+        &amp;quot;alg&amp;quot;: &amp;quot;HS256&amp;quot;,
+        &amp;quot;typ&amp;quot;: &amp;quot;JWT&amp;quot;
+    }
+&lt;/code&gt;
+The second part of the token is the &lt;strong&gt;payload&lt;/strong&gt;, which contains the claims. Claims are statements about an entity (typically, the user) and additional metadata. There are a set of predefined claims, like &amp;#39;iat&amp;#39; (issued at), which are not mandatory but recommended,  and custom claims, witch can whatever you want, like &amp;#39;username&amp;#39;, &amp;#39;usermail&amp;#39;, &amp;#39;permissions&amp;#39; and others.&lt;/p&gt;
 
 &lt;p&gt;The third part is the &lt;strong&gt;signature&lt;/strong&gt;. To create the signature part you have to take the encoded header, the encoded payload, a secret, the algorithm specified in the header, and sign that.&lt;/p&gt;
 
-&lt;p&gt;For example:&lt;/p&gt;
+&lt;p&gt;For example:
+&lt;code&gt;
+    HMACSHA256(
+    base64UrlEncode(header) + &amp;quot;.&amp;quot; +
+    base64UrlEncode(payload),
+    secret)
+&lt;/code&gt; 
+The resulting token would be something like that below:
+&lt;code&gt;
+    eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWV9.TJVA95OrM7E2cBab30RMHrHDcEfxjoYZgeFONFh7HgQ
+&lt;/code&gt;&lt;/p&gt;
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;HMACSHA256(
-base64UrlEncode(header) + &quot;.&quot; +
-base64UrlEncode(payload),
-secret)
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+&lt;h1&gt;Traditional session based authentication vs Token based authentication&lt;/h1&gt;
 
-&lt;p&gt;The resulting token would be something like that below:&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWV9.TJVA95OrM7E2cBab30RMHrHDcEfxjoYZgeFONFh7HgQ
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;h1 id=&quot;traditional-session-based-authentication-vs-token-based-authentication&quot;&gt;Traditional session based authentication vs Token based authentication&lt;/h1&gt;
-
-&lt;p&gt;In authentication mechanisms context, JWT is a kind of a protocol to implement a stateless token based authentication, witch has many advantages over traditional session based authentication. Let’s briefly describe these two types of authentication:&lt;/p&gt;
+&lt;p&gt;In authentication mechanisms context, JWT is a way to create the token in a stateless token based authentication system, witch has many advantages over traditional session based authentication system. Let&amp;#39;s briefly describe these two types of authentication:&lt;/p&gt;
 
 &lt;ul&gt;
-  &lt;li&gt;
-    &lt;p&gt;&lt;strong&gt;Traditional session based authentication:&lt;/strong&gt; a client authenticates with its credentials and receives a session_id and attaches this to every subsequent outgoing request. The session_id is just an identifier and the server does everything else.&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;&lt;strong&gt;Token based authentication:&lt;/strong&gt; a client authenticaties with is credentials and receives signed token which is then attached to every subsequent request. The server validates the token in every request. The token can carry any type of information and can be read on client (security aspects discussed later on) or server side.&lt;/p&gt;
-  &lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;Traditional session based authentication:&lt;/strong&gt; a client authenticates with its credentials and receives a session&lt;em&gt;id and attaches this to every subsequent outgoing request. The session&lt;/em&gt;id is just an identifier and the server does everything else.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;Token based authentication:&lt;/strong&gt; a client authenticaties with is credentials and receives signed token which is then attached to every subsequent request. The server validates the token in every request. The token can carry any type of information and can be read on client (security aspects discussed later on) or server side. &lt;/p&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;&lt;img src=&quot;/images/jwt1.png&quot; alt=&quot;Requests sequence diagram&quot; title=&quot;Requests/Response flow for each type of authentication&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/images/jwt1.png&quot; alt=&quot;Requests sequence diagram&quot; title=&quot;Requests/Response flow for each type of authentication&quot;&gt;&lt;/p&gt;
 
-&lt;p&gt;Now let’s see which are the token based authentication main advantages:&lt;/p&gt;
+&lt;p&gt;Now let&amp;#39;s see witch are the token based authentication main advantages:&lt;/p&gt;
 
 &lt;ol&gt;
-  &lt;li&gt;
-    &lt;p&gt;&lt;strong&gt;Token based authentication is stateless&lt;/strong&gt; A stateless web architecture is dependent only on the input parameters that are supplied. To achieve a stateless app, the underlying authentication mechanism has to be stateless. This property makes the scalability more cheap and simple. Here is a quick picture of how to scale a stateless service.&lt;/p&gt;
-
-    &lt;p&gt;&lt;img src=&quot;/images/jwt2.png&quot; alt=&quot;Scaling stateless&quot; title=&quot;Scaling stateless architecture&quot; /&gt;&lt;/p&gt;
-
-    &lt;p&gt;On the other hand, the traditional session based authentication is stateful, because it depends on server side data to be aware about user session state. The session data can be stored in memory or in database. To scale a stateful service, there are two options: using sticky sessions or non-sticky sessions. The sticky sessions option add rules on the load balancer to guarantee that every requests of the same user sessions goes to the same webserver that authenticated that user. The non-sticky sessions option is more efficient and complex. It adds another level of load balancing flow, like the image below:&lt;/p&gt;
-
-    &lt;p&gt;&lt;img src=&quot;/images/jwt3.png&quot; alt=&quot;Scaling stateful&quot; title=&quot;Scaling stateful sticky session architecture&quot; /&gt;&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;&lt;strong&gt;Token based authentication is easily extensible&lt;/strong&gt; Suppose that an user is authenticated in a service A so that it receives a token signed with a private key holded by service A. This token can be used to share session state of that user on service A on the whole internet. If a service B, that holds the public key of service A, wants to use the session state of users on service A, it can rely directly on that token.&lt;/p&gt;
-
-    &lt;p&gt;On the other hand, sharing session_id is not that simple. Session data is usually stored in databases not exposed directly on the internet. When the session data is stored in memory, that session_id would be shareable but not before a criptographic sign.&lt;/p&gt;
-  &lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Token based authentication is stateless&lt;/strong&gt; A stateless web architecture is dependent only on the input parameters that are supplied. To achieve a stateless service, the underlying authentication mechanism has to be stateless. This property makes the scalability more cheap and simple. Here is a quick picture of how to scale a stateless service.&lt;/li&gt;
 &lt;/ol&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/jwt2.png&quot; alt=&quot;Scaling stateless&quot; title=&quot;Scaling stateless architecture&quot;&gt;&lt;/p&gt;
+
+&lt;p&gt;On the other hand, the traditional session based authentication is stateful, because it depends on server side data to be aware about user session state. The session data can be stored in memory or in database. To scale a stateful service, there are two options: using sticky sessions or non-sticky sessions.&lt;/p&gt;
+
+&lt;p&gt;The sticky sessions option add rules on the load balancer to guarantee that every requests of the same user sessions goes to the same webserver that authenticated that user. The non-sticky sessions option is more efficient and complex. It adds another level of load balancing flow, like the image below:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/jwt3.png&quot; alt=&quot;Scaling stateful&quot; title=&quot;Scaling stateful sticky session architecture&quot;&gt;&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;Token based authentication is easily extensible&lt;/strong&gt; Suppose that an user is authenticated in a service A so that it receives a token signed with a private key holded by service A. This token can be used to share session state of that user on service A on the whole internet. If a service B, that holds the public key of service A, wants to use the session state of users on service A, it can rely directly on that token.&lt;br&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;On the other hand, sharing session&lt;em&gt;id is not that simple. Session data is usually stored in databases not exposed directly on the internet. When the session data is stored in memory, that session&lt;/em&gt;id would be shareable but not before a criptographic sign.&lt;/p&gt;
 
 &lt;p&gt;There other advantages also, like CORS issues and security issues, but I will leave those to another post.&lt;/p&gt;
 
-&lt;h1 id=&quot;jwt-vs-other-token-standards&quot;&gt;JWT vs other token standards&lt;/h1&gt;
+&lt;h1&gt;JWT vs other token standards&lt;/h1&gt;
 
-&lt;p&gt;Now let’s compare JWT against other token standards: &lt;strong&gt;Simple Web Tokens (SWT)&lt;/strong&gt; and &lt;strong&gt;Security Assertion Markup Language (SAML)&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Now let&amp;#39;s compare JWT against other token standards: &lt;strong&gt;Simple Web Tokens (SWT)&lt;/strong&gt; and &lt;strong&gt;Security Assertion Markup Language (SAML)&lt;/strong&gt;&lt;/p&gt;
 
-&lt;p&gt;As JSON is less verbose than XML, when it is encoded its size is also smaller, making JWT more compact than SAML. This makes JWT a good choice to be passed in HTML and HTTP environments. In fact, a JWT could be passed as an URL parameter.&lt;/p&gt;
+&lt;p&gt;As JSON is less verbose than XML, when it is encoded its size is also smaller, making JWT more compact than the SAML token. This makes JWT a good choice to be passed in HTML and HTTP environments. In fact, a JWT could be passed as an URL parameter.&lt;/p&gt;
 
 &lt;p&gt;Security-wise, SWT can only be symmetricly signed by a shared secret using the HMAC algorithm. However, JWT and SAML tokens can use a public/private key pair in the form of a X.509 certificate for signing. Signing XML with XML Digital Signature without introducing obscure security holes is very difficult when compared to the simplicity of signing JSON.&lt;/p&gt;
 
-&lt;p&gt;JSON parsers are common in most programming languages because they map directly to objects. Conversely, XML doesn’t have a natural document-to-object mapping. This makes it easier to work with JWT than SAML assertions.&lt;/p&gt;
+&lt;p&gt;JSON parsers are common in most programming languages because they map directly to objects. Conversely, XML doesn&amp;#39;t have a natural document-to-object mapping. This makes it easier to work with JWT than SAML assertions.&lt;/p&gt;
 
-&lt;h1 id=&quot;conclusion&quot;&gt;Conclusion&lt;/h1&gt;
+&lt;h1&gt;Conclusion&lt;/h1&gt;
 
-&lt;p&gt;Those advantages are enougth in many cases to decide for using a compact, url-safe and standized way (JWT) to obtain a token based authentication mechanism. But how to use it? What are the best practicties? Let’s see later on next posts!&lt;/p&gt;
+&lt;p&gt;Those advantages are enougth in many cases to decide for using a compact, url-safe and standized way (JWT) to obtain a token based authentication mechanism. But how to use it? What are the best practicties? Let&amp;#39;s see later on next posts!&lt;/p&gt;
+
+&lt;h1&gt;Examples&lt;/h1&gt;
+
+&lt;p&gt;If you want to see a simple example of use of JWT for authentication with python and AngularJS, see &lt;a href=&quot;http://github.com/du2x/jwtlab&quot;&gt;JWT lab&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;If you want to see an example of single sign in a simulated VPN with virtual machines using JWT, see &lt;a href=&quot;https://github.com/du2x/jwtlab_privatenetwork&quot;&gt;JWT lab private network&lt;/a&gt;&lt;/p&gt;
 </description>
-        <pubDate>Wed, 06 Apr 2016 16:09:02 +0000</pubDate>
+        <pubDate>Wed, 06 Apr 2016 13:09:02 -0300</pubDate>
         <link>http://du2x.github.io/jwt/auth/2016/04/06/jwt-brief-overview.html</link>
         <guid isPermaLink="true">http://du2x.github.io/jwt/auth/2016/04/06/jwt-brief-overview.html</guid>
         

@@ -16,4 +16,9 @@ twitter_username: du2x
 github_username:  du2x
 
 # Build settings
-markdown: kramdown
+#markdown: kramdown
+
+markdown: redcarpet
+redcarpet:
+   extensions: ["tables", "fenced_code_blocks"]
+

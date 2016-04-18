@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>Authentication with JWT brief overview</title>
+  <title>Authentication with JWT</title>
   <meta name="description" content="Last month I was searching about the best way to implement authentication/authorization in a new service. Then I found JWT. At a first glance, I feel confuse...">
 
   <link rel="stylesheet" href="/css/main.css">
@@ -57,125 +57,148 @@
         <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
 
   <header class="post-header">
-    <h1 class="post-title" itemprop="name headline">Authentication with JWT brief overview</h1>
-    <p class="post-meta"><time datetime="2016-04-06T16:09:02+00:00" itemprop="datePublished">Apr 6, 2016</time></p>
+    <h1 class="post-title" itemprop="name headline">Authentication with JWT</h1>
+    <p class="post-meta"><time datetime="2016-04-06T13:09:02-03:00" itemprop="datePublished">Apr 6, 2016</time></p>
   </header>
 
   <div class="post-content" itemprop="articleBody">
-    <p>Last month I was searching about the best way to implement authentication/authorization in a new service. Then I found JWT. At a first glance, I feel confused about the way it works, but after reading a few articles and examples, JWT showed up beautiful and simple so that I decided to write about it as the first post of my blog.</p>
+    <p>Last month I was searching about the best way to implement authentication/authorization in a new service. Then I found JWT. At a first glance, I feel confused about the way it works, but after reading a few articles and examples, authentication with JWT showed up beautiful and simple so that I decided to write about it as the first post of my blog.</p>
 
-<h1 id="jwt-definition">JWT Definition</h1>
+<h1>JWT Definition</h1>
 
-<p>Let’s start with JWT definition, from Wikipedia:</p>
+<p>Let&#39;s start with JWT definition, from Wikipedia:</p>
 
 <blockquote>
-  <p>JSON Web Token (JWT) is a JSON-based open standard (RFC 7519) for passing claims between parties
+<p>JSON Web Token (JWT) is a JSON-based open standard (RFC 7519) for passing claims between parties
 in web application environment. The tokens are designed to be compact, URL-safe and usable especially 
 in web browser single sign-on (SSO) context.</p>
 </blockquote>
 
-<p>From that, we can assume JWT can be used as authentication mechanism and for secure message interchange.</p>
+<p>From that, we can assume JWT can be used as part of a authentication mechanism or for secure message interchange. </p>
 
 <p>Another good definition comes from http://jwt.io:</p>
 
 <blockquote>
-  <p>JSON Web Tokens are an open, industry standard RFC 7519 method for representing claims 
+<p>JSON Web Tokens are an open, industry standard RFC 7519 method for representing claims 
 securely between two parties.</p>
 </blockquote>
 
-<h2 id="jwt-structure">JWT Structure</h2>
+<p>What are those claims and how it can be represented securely between two parties? Let`s see.</p>
+
+<h1>JWT Structure</h1>
 
 <p>To understand better about that, we should take a look on JWT structure:</p>
 
 <p>JSON Web Tokens consist of a string with three parts separated by dots (.), which are:</p>
 
 <ul>
-  <li>Header</li>
-  <li>Payload</li>
-  <li>Signature</li>
+<li>Header</li>
+<li>Payload</li>
+<li>Signature</li>
 </ul>
 
 <p>The <strong>header</strong> consists of two parts: the type of token (witch is JWT) and the hashing algorithm, witch can be a symetric or asymetric hashing algorithm.</p>
 
-<p>For example</p>
-
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="p">{</span><span class="w">
-	</span><span class="nt">"alg"</span><span class="p">:</span><span class="w"> </span><span class="s2">"HS256"</span><span class="p">,</span><span class="w">
-	</span><span class="nt">"typ"</span><span class="p">:</span><span class="w"> </span><span class="s2">"JWT"</span><span class="w">
-</span><span class="p">}</span><span class="w">
-</span></code></pre>
-</div>
-
-<p>The second part of the token is the <strong>payload</strong>, which contains the claims. Claims are statements about an entity (typically, the user) and additional metadata. There are a set of predefined claims, like ‘iat’ (issued at), which are not mandatory but recommended,  and custom claims, witch can whatever you want, like ‘username’, ‘usermail’, ‘permissions’ and others.</p>
+<p>For example
+<code>
+    {
+        &quot;alg&quot;: &quot;HS256&quot;,
+        &quot;typ&quot;: &quot;JWT&quot;
+    }
+</code>
+The second part of the token is the <strong>payload</strong>, which contains the claims. Claims are statements about an entity (typically, the user) and additional metadata. There are a set of predefined claims, like &#39;iat&#39; (issued at), which are not mandatory but recommended,  and custom claims, witch can whatever you want, like &#39;username&#39;, &#39;usermail&#39;, &#39;permissions&#39; and others.</p>
 
 <p>The third part is the <strong>signature</strong>. To create the signature part you have to take the encoded header, the encoded payload, a secret, the algorithm specified in the header, and sign that.</p>
 
-<p>For example:</p>
+<p>For example:
+<code>
+    HMACSHA256(
+    base64UrlEncode(header) + &quot;.&quot; +
+    base64UrlEncode(payload),
+    secret)
+</code> 
+The resulting token would be something like that below:
+<code>
+    eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWV9.TJVA95OrM7E2cBab30RMHrHDcEfxjoYZgeFONFh7HgQ
+</code></p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>HMACSHA256(
-base64UrlEncode(header) + "." +
-base64UrlEncode(payload),
-secret)
-</code></pre>
-</div>
+<h1>Traditional session based authentication vs Token based authentication</h1>
 
-<p>The resulting token would be something like that below:</p>
-
-<div class="highlighter-rouge"><pre class="highlight"><code>eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWV9.TJVA95OrM7E2cBab30RMHrHDcEfxjoYZgeFONFh7HgQ
-</code></pre>
-</div>
-
-<h1 id="traditional-session-based-authentication-vs-token-based-authentication">Traditional session based authentication vs Token based authentication</h1>
-
-<p>In authentication mechanisms context, JWT is a kind of a protocol to implement a stateless token based authentication, witch has many advantages over traditional session based authentication. Let’s briefly describe these two types of authentication:</p>
+<p>In authentication mechanisms context, JWT is a way to create the token in a stateless token based authentication system, witch has many advantages over traditional session based authentication system. Let&#39;s briefly describe these two types of authentication:</p>
 
 <ul>
-  <li>
-    <p><strong>Traditional session based authentication:</strong> a client authenticates with its credentials and receives a session_id and attaches this to every subsequent outgoing request. The session_id is just an identifier and the server does everything else.</p>
-  </li>
-  <li>
-    <p><strong>Token based authentication:</strong> a client authenticaties with is credentials and receives signed token which is then attached to every subsequent request. The server validates the token in every request. The token can carry any type of information and can be read on client (security aspects discussed later on) or server side.</p>
-  </li>
+<li><p><strong>Traditional session based authentication:</strong> a client authenticates with its credentials and receives a session<em>id and attaches this to every subsequent outgoing request. The session</em>id is just an identifier and the server does everything else.</p></li>
+<li><p><strong>Token based authentication:</strong> a client authenticaties with is credentials and receives signed token which is then attached to every subsequent request. The server validates the token in every request. The token can carry any type of information and can be read on client (security aspects discussed later on) or server side. </p></li>
 </ul>
 
-<p><img src="/images/jwt1.png" alt="Requests sequence diagram" title="Requests/Response flow for each type of authentication" /></p>
+<p><img src="/images/jwt1.png" alt="Requests sequence diagram" title="Requests/Response flow for each type of authentication"></p>
 
-<p>Now let’s see which are the token based authentication main advantages:</p>
+<p>Now let&#39;s see witch are the token based authentication main advantages:</p>
 
 <ol>
-  <li>
-    <p><strong>Token based authentication is stateless</strong> A stateless web architecture is dependent only on the input parameters that are supplied. To achieve a stateless app, the underlying authentication mechanism has to be stateless. This property makes the scalability more cheap and simple. Here is a quick picture of how to scale a stateless service.</p>
-
-    <p><img src="/images/jwt2.png" alt="Scaling stateless" title="Scaling stateless architecture" /></p>
-
-    <p>On the other hand, the traditional session based authentication is stateful, because it depends on server side data to be aware about user session state. The session data can be stored in memory or in database. To scale a stateful service, there are two options: using sticky sessions or non-sticky sessions. The sticky sessions option add rules on the load balancer to guarantee that every requests of the same user sessions goes to the same webserver that authenticated that user. The non-sticky sessions option is more efficient and complex. It adds another level of load balancing flow, like the image below:</p>
-
-    <p><img src="/images/jwt3.png" alt="Scaling stateful" title="Scaling stateful sticky session architecture" /></p>
-  </li>
-  <li>
-    <p><strong>Token based authentication is easily extensible</strong> Suppose that an user is authenticated in a service A so that it receives a token signed with a private key holded by service A. This token can be used to share session state of that user on service A on the whole internet. If a service B, that holds the public key of service A, wants to use the session state of users on service A, it can rely directly on that token.</p>
-
-    <p>On the other hand, sharing session_id is not that simple. Session data is usually stored in databases not exposed directly on the internet. When the session data is stored in memory, that session_id would be shareable but not before a criptographic sign.</p>
-  </li>
+<li><strong>Token based authentication is stateless</strong> A stateless web architecture is dependent only on the input parameters that are supplied. To achieve a stateless service, the underlying authentication mechanism has to be stateless. This property makes the scalability more cheap and simple. Here is a quick picture of how to scale a stateless service.</li>
 </ol>
+
+<p><img src="/images/jwt2.png" alt="Scaling stateless" title="Scaling stateless architecture"></p>
+
+<p>On the other hand, the traditional session based authentication is stateful, because it depends on server side data to be aware about user session state. The session data can be stored in memory or in database. To scale a stateful service, there are two options: using sticky sessions or non-sticky sessions.</p>
+
+<p>The sticky sessions option add rules on the load balancer to guarantee that every requests of the same user sessions goes to the same webserver that authenticated that user. The non-sticky sessions option is more efficient and complex. It adds another level of load balancing flow, like the image below:</p>
+
+<p><img src="/images/jwt3.png" alt="Scaling stateful" title="Scaling stateful sticky session architecture"></p>
+
+<ol>
+<li><strong>Token based authentication is easily extensible</strong> Suppose that an user is authenticated in a service A so that it receives a token signed with a private key holded by service A. This token can be used to share session state of that user on service A on the whole internet. If a service B, that holds the public key of service A, wants to use the session state of users on service A, it can rely directly on that token.<br></li>
+</ol>
+
+<p>On the other hand, sharing session<em>id is not that simple. Session data is usually stored in databases not exposed directly on the internet. When the session data is stored in memory, that session</em>id would be shareable but not before a criptographic sign.</p>
 
 <p>There other advantages also, like CORS issues and security issues, but I will leave those to another post.</p>
 
-<h1 id="jwt-vs-other-token-standards">JWT vs other token standards</h1>
+<h1>JWT vs other token standards</h1>
 
-<p>Now let’s compare JWT against other token standards: <strong>Simple Web Tokens (SWT)</strong> and <strong>Security Assertion Markup Language (SAML)</strong></p>
+<p>Now let&#39;s compare JWT against other token standards: <strong>Simple Web Tokens (SWT)</strong> and <strong>Security Assertion Markup Language (SAML)</strong></p>
 
-<p>As JSON is less verbose than XML, when it is encoded its size is also smaller, making JWT more compact than SAML. This makes JWT a good choice to be passed in HTML and HTTP environments. In fact, a JWT could be passed as an URL parameter.</p>
+<p>As JSON is less verbose than XML, when it is encoded its size is also smaller, making JWT more compact than the SAML token. This makes JWT a good choice to be passed in HTML and HTTP environments. In fact, a JWT could be passed as an URL parameter.</p>
 
 <p>Security-wise, SWT can only be symmetricly signed by a shared secret using the HMAC algorithm. However, JWT and SAML tokens can use a public/private key pair in the form of a X.509 certificate for signing. Signing XML with XML Digital Signature without introducing obscure security holes is very difficult when compared to the simplicity of signing JSON.</p>
 
-<p>JSON parsers are common in most programming languages because they map directly to objects. Conversely, XML doesn’t have a natural document-to-object mapping. This makes it easier to work with JWT than SAML assertions.</p>
+<p>JSON parsers are common in most programming languages because they map directly to objects. Conversely, XML doesn&#39;t have a natural document-to-object mapping. This makes it easier to work with JWT than SAML assertions.</p>
 
-<h1 id="conclusion">Conclusion</h1>
+<h1>Conclusion</h1>
 
-<p>Those advantages are enougth in many cases to decide for using a compact, url-safe and standized way (JWT) to obtain a token based authentication mechanism. But how to use it? What are the best practicties? Let’s see later on next posts!</p>
+<p>Those advantages are enougth in many cases to decide for using a compact, url-safe and standized way (JWT) to obtain a token based authentication mechanism. But how to use it? What are the best practicties? Let&#39;s see later on next posts!</p>
+
+<h1>Examples</h1>
+
+<p>If you want to see a simple example of use of JWT for authentication with python and AngularJS, see <a href="http://github.com/du2x/jwtlab">JWT lab</a></p>
+
+<p>If you want to see an example of single sign in a simulated VPN with virtual machines using JWT, see <a href="https://github.com/du2x/jwtlab_privatenetwork">JWT lab private network</a></p>
 
   </div>
+
+<div id="disqus_thread"></div>
+<script>
+/**
+* RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+* LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables
+*/
+/*
+var disqus_config = function () {
+this.page.url = http://du2x.github.io/jwt/auth/2016/04/06/jwt-brief-overview.html; // Replace PAGE_URL with your page's canonical URL variable
+this.page.identifier = /jwt/auth/2016/04/06/jwt-brief-overview.html; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+};
+*/
+(function() { // DON'T EDIT BELOW THIS LINE
+var d = document, s = d.createElement('script');
+
+s.src = '//du2xblog.disqus.com/embed.js';
+
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
 
 </article>
 
