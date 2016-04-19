@@ -68,20 +68,22 @@ In authentication mechanisms context, JWT is a way to create the token in a stat
 
 * **Token based authentication:** a client authenticaties with is credentials and receives signed token which is then attached to every subsequent request. The server validates the token in every request. The token can carry any type of information and can be read on client (security aspects discussed later on) or server side. 
 
-![Requests sequence diagram](/images/jwt1.png "Requests/Response flow for each type of authentication")
+->![Requests sequence diagram](/images/jwt1.png "Requests/Response flow for each type of authentication")<-
 
 
 Now let's see witch are the token based authentication main advantages:
 
 1. **Token based authentication is stateless** A stateless web architecture is dependent only on the input parameters that are supplied. To achieve a stateless service, the underlying authentication mechanism has to be stateless. This property makes the scalability more cheap and simple. Here is a quick picture of how to scale a stateless service.
 
-   ![Scaling stateless](/images/jwt2.png "Scaling stateless architecture")
+   ->![Scaling stateless](/images/jwt2.png "Scaling stateless architecture")<-
 
    On the other hand, the traditional session based authentication is stateful, because it depends on server side data to be aware about user session state. The session data can be stored in memory or in database. To scale a stateful service, there are two options: using sticky sessions or non-sticky sessions.
 
-   The sticky sessions option add rules on the load balancer to guarantee that every requests of the same user sessions goes to the same webserver that authenticated that user. The non-sticky sessions option is more efficient and complex. It adds another level of load balancing flow, like the image below:
+   The sticky sessions option add rules on the load balancer to guarantee that every requests of the same user sessions goes to the same webserver that authenticated that user. 
 
-   ![Scaling stateful](/images/jwt3.png "Scaling stateful sticky session architecture")
+The non-sticky sessions option is more efficient and complex. It adds another level in load balancing flow, like the image below:
+
+   ->![Scaling stateful](/images/jwt3.png "Scaling stateful sticky session architecture")<-
 
 
 2. **Token based authentication is easily extensible** Suppose that an user is authenticated in a service A so that it receives a token signed with a private key holded by service A. This token can be used to share session state of that user on service A on the whole internet. If a service B, that holds the public key of service A, wants to use the session state of users on service A, it can rely directly on that token.  
@@ -100,13 +102,15 @@ Security-wise, SWT can only be symmetricly signed by a shared secret using the H
 
 JSON parsers are common in most programming languages because they map directly to objects. Conversely, XML doesn't have a natural document-to-object mapping. This makes it easier to work with JWT than SAML assertions.
 
+# Show me the code!
+
+I created a repository called jwtlab on github, where I set up an example of use of JWT to achieve an authentication system. Check it out!
+
+
 # Conclusion
 
-Those advantages are enougth in many cases to decide for using a compact, url-safe and standized way (JWT) to obtain a token based authentication mechanism. But how to use it? What are the best practicties? Let's see later on next posts!
+The advantages of token based authentication over traditional authentication are enougth in many cases to decide for using a compact, url-safe and standized way  to obtain a token based authentication mechanism. 
 
-# Examples
+In fact, JWT is used in the most important standard for single sign-on and identity provision on the internet: Openid Connect.
 
-If you want to see a simple example of use of JWT for authentication with python and AngularJS, see [JWT lab](http://github.com/du2x/jwtlab)
-
-If you want to see an example of single sign in a simulated VPN with virtual machines using JWT, see [JWT lab private network](https://github.com/du2x/jwtlab_privatenetwork)
-
+Openid connect is a bit more complex that the authentication mechanism shown in this article, but much more cool and powerful. We well talk about it soon. 
