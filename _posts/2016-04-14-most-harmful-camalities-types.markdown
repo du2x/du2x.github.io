@@ -375,10 +375,17 @@ Let's see the levels of both columns
 ```R
 levels(new_storm_data$PROPDMGEXP)
 ```
+```
+[1] "B" "K" "m" "k" "M" ''
+```
 
 ```R
 levels(new_storm_data$CROPDMGEXP)
 ```
+```
+[1] "B" "K" "m" "k" "M" ''
+```
+
 
 I should convert the values of `$PROPDMGEXP` and `$CROPDMGEXP` from literal to numeric.
 
@@ -388,9 +395,6 @@ levels(new_storm_data$PROPDMGEXP)[levels(new_storm_data$PROPDMGEXP)=='K']="3"
 levels(new_storm_data$PROPDMGEXP)[levels(new_storm_data$PROPDMGEXP)=='m']="6"
 levels(new_storm_data$PROPDMGEXP)[levels(new_storm_data$PROPDMGEXP)=='M']="6"
 levels(new_storm_data$PROPDMGEXP)[levels(new_storm_data$PROPDMGEXP)=='k']="3"
-levels(new_storm_data$PROPDMGEXP)[levels(new_storm_data$PROPDMGEXP)=='K']="3"
-levels(new_storm_data$PROPDMGEXP)[levels(new_storm_data$PROPDMGEXP)=='m']="6"
-levels(new_storm_data$PROPDMGEXP)[levels(new_storm_data$PROPDMGEXP)=='M']="6"
 levels(new_storm_data$PROPDMGEXP)[levels(new_storm_data$PROPDMGEXP)=='']="0"
 
 levels(new_storm_data$CROPDMGEXP)[levels(new_storm_data$CROPDMGEXP)=='B']="9"
@@ -398,9 +402,6 @@ levels(new_storm_data$CROPDMGEXP)[levels(new_storm_data$CROPDMGEXP)=='K']="3"
 levels(new_storm_data$CROPDMGEXP)[levels(new_storm_data$CROPDMGEXP)=='m']="6"
 levels(new_storm_data$CROPDMGEXP)[levels(new_storm_data$CROPDMGEXP)=='M']="6"
 levels(new_storm_data$CROPDMGEXP)[levels(new_storm_data$CROPDMGEXP)=='k']="3"
-levels(new_storm_data$CROPDMGEXP)[levels(new_storm_data$CROPDMGEXP)=='K']="3"
-levels(new_storm_data$CROPDMGEXP)[levels(new_storm_data$CROPDMGEXP)=='m']="6"
-levels(new_storm_data$CROPDMGEXP)[levels(new_storm_data$CROPDMGEXP)=='M']="6"
 levels(new_storm_data$CROPDMGEXP)[levels(new_storm_data$CROPDMGEXP)=='']="0"
 
 dmg_storm_data <- new_storm_data[new_storm_data$PROPDMGEXP %in% c('0', '1', '2', '3', '4', '6', '7', '8', '9'),]
@@ -433,7 +434,7 @@ dmg_by_event
 ##                            (fctr)        (dbl)
 ## 1                           flood 169161879613
 ## 2  wind/typhoon/tornado/hurricane 128450147639
-## 3                           storm  64965912883
+## 3                   regular storm  64965912883
 ## 4                            hail  18314402084
 ## 5                         drought  14968172000
 ## 6                        ice/snow  12268074410
@@ -443,6 +444,8 @@ dmg_by_event
 ## 10                      lightning    888767867
 ## ..                            ...          ...
 ```
+
+TODO: convert the damage to a currency format.
 
 Those are the most harmful event types regarding damages to economy. 
 
