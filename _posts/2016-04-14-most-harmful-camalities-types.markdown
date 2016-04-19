@@ -6,8 +6,6 @@ date:   2016-04-06 16:09:02 +0000
 categories: data-science R
 ---
 
-# Abstract
-
 Storms and other severe weather events can cause both public health and economic problems for communities and municipalities. Many severe events can result in fatalities, injuries, and property damage, and preventing such outcomes to the extent possible is a key concern.
 
 In this article, I describe an analysis made over the U.S. National Oceanic and Atmospheric Administration’s (NOAA) storm database to discover which types of events are most harmful with respect to population health and those that have the greatest economic consequences.
@@ -73,6 +71,8 @@ str(strom_data)
 The main goal of this article is compare the event types with each other in respect of how harmful they are. The event type values are stored in the `$EVTYPE` column
 
 To analyze the damage against human health, we need to focus on `$FATALITIES` and `$INJURIES` columns. To think about the damage against economy the focus changes to `$CROPDMGEXP`, `$CROPDMG`, `$PROPDMG` and `$PROPDMGEXP` columns.
+
+But first, I should do some transformations on `$EVTYPE` column.
 
 # Event type transformations
 
@@ -441,4 +441,7 @@ dmg_by_event
 ## 10                      lightning    888767867
 ## ..                            ...          ...
 ```
+
+Those are the most harmful event types regarding damages to economy. 
+
 
