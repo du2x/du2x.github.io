@@ -2,8 +2,8 @@
 layout: post
 comments: true
 title:  "Most harmful weather event types"
-date:   2016-04-06 16:09:02 +0000
-categories: data-science R
+date:   2016-04-14 16:09:02 +0000
+categories: data-science R dplyr reshape
 ---
 
 Storms and other severe weather events can cause both public health and economic problems for communities and municipalities. Many severe events can result in fatalities, injuries, and property damage, and preventing such outcomes to the extent possible is a key concern.
@@ -280,7 +280,9 @@ fatalities_injuries_by_event_decade <- n_storm_data  %>%
        arrange(desc(fatalities, injuries))
 ```
 
-Now, let’s reshape data for better visualization. Firstly injuries data.
+Now, let’s reshape data for better visualization using **reshape** library.
+
+First showing injuries values.
 
 ```R
 melted_injuries_by_event_decade <- melt(fatalities_injuries_by_event_decade, c("EVTYPE", 'DECADE'), 'injuries')
