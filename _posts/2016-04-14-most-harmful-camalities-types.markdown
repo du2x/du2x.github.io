@@ -120,7 +120,9 @@ levels(storm_data$EVTYPE)[hail_idx]
 ## [47] "WIND/HAIL"
 ```
 
-I should group those close related event type values in order to make the comparison practicable.
+I should group those closely related event type values in order to make the comparison practicable.
+
+NOTE: Here, as I am not a specialist on weather issues, I might have done a few wrong guesses about some relations of event types.
 
 ```R
 levels(storm_data$EVTYPE) <- tolower(levels(storm_data$EVTYPE))
@@ -262,7 +264,7 @@ fatalities_injuries_by_event
 
 As we can see, the “wind/typhoon/tornado/hurricane” event type has a much higher number of injuries then other event types. That is suspicious. Let`s investigate a bit more.
 
-## Arranging that by decades
+## Arranging data by decades
 
 Let’s see how these records are arranged by decades, focusing only on the top event types.
 
@@ -362,7 +364,19 @@ Those may be the most harmful to human health event types from 1993 to today.
 
 ## Event types with the greatest economic consequences
 
-Explain the PROPDMG columns
+The columns $PROPDMG represents values of damage on properties, and $CROPDMG reprepresents values of damage on crops.
+
+Both values have to be multiplied by `10 ^ x` where `x` is the correspondent exponential value  (`$PROPDMGEXP`or `$CROPDMGEXP`)
+
+Let's see the levels of both columns
+
+```R
+levels(new_storm_data$PROPDMGEXP)
+```
+
+```R
+levels(new_storm_data$CROPDMGEXP)
+```
 
 I should convert the values of `$PROPDMGEXP` and `$CROPDMGEXP` from literal to numeric.
 
