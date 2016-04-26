@@ -363,6 +363,18 @@ fatalities_injuries_by_event
 ## 10                           fire     1458         87
 ## ..                            ...      ...        ...
 ```
+or, graphically:
+
+```R
+mfibe<-melt(as.data.frame(fatalities_injuries_by_event[1:10,]), measure.vars=c('fatalities', 'injuries'))
+ggplot(mfibe, aes(x=reorder(EVTYPE, value), y=value, fill=variable)) + 
+     geom_bar(stat="identity") +
+     ylab("Number of") +
+     xlab("Event type") +
+     coord_flip()
+```
+
+![Fatalities and Injuries by Event Type](/images/fat_inj_by_evtype.png "Fatalities and Injuries by Event Type")
 
 Those may be the most harmful to human health event types from 1993 to today.
 
@@ -447,7 +459,17 @@ dmg_by_event
 ## ..                            ...          ...
 ```
 
-TODO: convert the damage to a currency format.
+or graphically:
+
+```
+ggplot(dmg_by_event[1:10,], aes(x=reorder(EVTYPE, damage), y=damage)) 
+  + geom_bar(stat="identity") 
+  + xlab("Event type") 
+  + ylab("Damage in dollars") 
+  + coord_flip()
+```
+
+![Damage by Event Type](/images/dmg_by_evtype.png "Damage by Event Type")
 
 Those are the most harmful event types regarding damages to economy. 
 
