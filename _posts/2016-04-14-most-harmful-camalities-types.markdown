@@ -12,7 +12,7 @@ In this article, I describe an analysis made over the U.S. National Oceanic and 
 
 This work is an assignment of Reproducible Research course, which is part of John Hopkins Data Science specialization that I am taking at Coursera.
 
-The whole analysis was made with the R programming language (3.2.5) and is directly reproducible by coping and pasting the code.
+The whole analysis was made with the R programming language (3.2.5) and libraries **dplyr**, **reshape2** and **ggplot**. 
 
 # Downloading and loading NOAA data
 
@@ -364,6 +364,8 @@ fatalities_injuries_by_event
 ## ..                            ...      ...        ...
 ```
 or, graphically:
+
+*to generate this stacked barplot with ggplot, the input data frame should be in the long format, which can be easily taken with **melt** function from **reshape2** library. *
 
 ```R
 mfibe<-melt(as.data.frame(fatalities_injuries_by_event[1:10,]), measure.vars=c('fatalities', 'injuries'))
