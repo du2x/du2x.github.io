@@ -1,7 +1,7 @@
 ---
 layout: post
 comments: true
-title:  "Most harmful weather event types"
+title:  "Figuring out the most harmful weather event types with R"
 date:   2016-04-14 16:09:02 +0000
 categories: data-science R dplyr reshape
 ---
