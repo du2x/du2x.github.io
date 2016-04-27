@@ -382,9 +382,9 @@ Those may be the most harmful to human health event types from 1993 to today.
 
 ## Event types with the greatest economic consequences
 
-The columns $PROPDMG represents values of damage on properties, and $CROPDMG reprepresents values of damage on crops.
+The columns `$PROPDMG` represents values of damage on properties, and `$CROPDMG` reprepresents values of damage on crops.
 
-Both values have to be multiplied by `10 ^ x` where `x` is the correspondent exponential value  (`$PROPDMGEXP`or `$CROPDMGEXP`)
+Both values have to be multiplied by `10 ^ x` where `x` is the correspondent exponential value  on  `$PROPDMGEXP` and `$CROPDMGEXP` columns.
 
 Let's see the levels of both columns
 
@@ -474,5 +474,3 @@ ggplot(dmg_by_event[1:10,], aes(x=reorder(EVTYPE, damage), y=damage))
 ![Damage by Event Type](/images/dmg_by_evtype.png "Damage by Event Type")
 
 Those are the most harmful event types regarding damages to economy. 
-
-
