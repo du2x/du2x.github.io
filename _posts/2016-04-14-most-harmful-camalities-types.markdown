@@ -322,11 +322,11 @@ fatalities_by_event_decade_wide
 ## 7                  regular storm   NA   NA   NA   NA  215  224   83
 ```
 
-We can see there are data only about wind/typhoon/tornado/hurricane event types before de 1990s. 
+We can see there are data only about wind/typhoon/tornado/hurricane event types before the 1990s. 
 
 Probably, NOAA wasn't prepared to collect data about the other event types before the 1990s. This fact makes the comparison unfair. 
 
-I should consider only data from after the 1990s (more specifically 1993, but we will omit this analysis for simplicity))
+I should consider only data from after the 1990s (more specifically 1993, but we will omit this analysis for simplicity).
 
 So, let us subset the data frame.
 
