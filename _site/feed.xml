@@ -6,8 +6,8 @@
 </description>
     <link>http://du2x.github.io/</link>
     <atom:link href="http://du2x.github.io/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Mon, 27 Jan 2020 23:25:54 -0300</pubDate>
-    <lastBuildDate>Mon, 27 Jan 2020 23:25:54 -0300</lastBuildDate>
+    <pubDate>Tue, 28 Jan 2020 00:33:55 -0300</pubDate>
+    <lastBuildDate>Tue, 28 Jan 2020 00:33:55 -0300</lastBuildDate>
     <generator>Jekyll v3.0.1</generator>
     
       <item>
@@ -20,7 +20,7 @@
 
 &lt;p&gt;Amongst all information about neighborhoods, one that stands out is its prevailing social class. The needs and opportunities of a neighborhood are often associated with this information.&lt;/p&gt;
 
-&lt;p&gt;Here, we will seek to develop a model capable of predicting the prevailing social class of each neighborhood, based on the categories of establishments there. This model will be trained with data from the set of reports of establishments in each neighborhood, retrievable from the Foursquare API and with the data a report from UFMG (University of Minas Gerais) that informs the majority social class of each neighborhood.&lt;/p&gt;
+&lt;p&gt;Here, we will seek to develop a model capable of predicting the prevailing social class of each neighborhood, based on the categories of venues there. This model will be trained with data from the set of reports of venues in each neighborhood, retrievable from the Foursquare API and with the data a report from UFMG (University of Minas Gerais) that informs the majority social class of each neighborhood.&lt;/p&gt;
 
 &lt;p&gt;If the model works well, we may use it to find out a valuable information of neighborhood on cities similar to Belo Horizonte that hasn’t a report about their neighborhood prevailing social class.&lt;/p&gt;
 
@@ -346,12 +346,10 @@ bh_food_venues.head()
     &lt;tr style=&quot;text-align: right;&quot;&gt;
       &lt;th&gt;&lt;/th&gt;
       &lt;th&gt;Neighborhood&lt;/th&gt;
-      &lt;th&gt;Neighborhood Latitude&lt;/th&gt;
-      &lt;th&gt;Neighborhood Longitude&lt;/th&gt;
       &lt;th&gt;ID&lt;/th&gt;
       &lt;th&gt;Venue&lt;/th&gt;
-      &lt;th&gt;Venue Latitude&lt;/th&gt;
-      &lt;th&gt;Venue Longitude&lt;/th&gt;
+      &lt;th&gt;Latitude&lt;/th&gt;
+      &lt;th&gt;Longitude&lt;/th&gt;
       &lt;th&gt;Venue Category&lt;/th&gt;
     &lt;/tr&gt;
   &lt;/thead&gt;
@@ -359,8 +357,6 @@ bh_food_venues.head()
     &lt;tr&gt;
       &lt;th&gt;0&lt;/th&gt;
       &lt;td&gt;AARAO REIS&lt;/td&gt;
-      &lt;td&gt;-19.847221&lt;/td&gt;
-      &lt;td&gt;-43.919508&lt;/td&gt;
       &lt;td&gt;4eb1d86e77c814d925751c99&lt;/td&gt;
       &lt;td&gt;Chapa Mágica&lt;/td&gt;
       &lt;td&gt;-19.845448&lt;/td&gt;
@@ -370,8 +366,6 @@ bh_food_venues.head()
     &lt;tr&gt;
       &lt;th&gt;1&lt;/th&gt;
       &lt;td&gt;AARAO REIS&lt;/td&gt;
-      &lt;td&gt;-19.847221&lt;/td&gt;
-      &lt;td&gt;-43.919508&lt;/td&gt;
       &lt;td&gt;5bf1cc4275eee40039f91adf&lt;/td&gt;
       &lt;td&gt;Burger King&lt;/td&gt;
       &lt;td&gt;-19.846823&lt;/td&gt;
@@ -381,8 +375,6 @@ bh_food_venues.head()
     &lt;tr&gt;
       &lt;th&gt;2&lt;/th&gt;
       &lt;td&gt;AARAO REIS&lt;/td&gt;
-      &lt;td&gt;-19.847221&lt;/td&gt;
-      &lt;td&gt;-43.919508&lt;/td&gt;
       &lt;td&gt;4daba4b84b22f071ead33715&lt;/td&gt;
       &lt;td&gt;Celo Burguer&lt;/td&gt;
       &lt;td&gt;-19.847524&lt;/td&gt;
@@ -392,8 +384,6 @@ bh_food_venues.head()
     &lt;tr&gt;
       &lt;th&gt;3&lt;/th&gt;
       &lt;td&gt;AARAO REIS&lt;/td&gt;
-      &lt;td&gt;-19.847221&lt;/td&gt;
-      &lt;td&gt;-43.919508&lt;/td&gt;
       &lt;td&gt;516dc84d498e618c69124919&lt;/td&gt;
       &lt;td&gt;bobs&lt;/td&gt;
       &lt;td&gt;-19.846710&lt;/td&gt;
@@ -403,8 +393,6 @@ bh_food_venues.head()
     &lt;tr&gt;
       &lt;th&gt;4&lt;/th&gt;
       &lt;td&gt;AARAO REIS&lt;/td&gt;
-      &lt;td&gt;-19.847221&lt;/td&gt;
-      &lt;td&gt;-43.919508&lt;/td&gt;
       &lt;td&gt;539991af498ea6a823188d29&lt;/td&gt;
       &lt;td&gt;Padaria Vila Verde&lt;/td&gt;
       &lt;td&gt;-19.847362&lt;/td&gt;
@@ -456,12 +444,10 @@ bh_all_venues.head()
     &lt;tr style=&quot;text-align: right;&quot;&gt;
       &lt;th&gt;&lt;/th&gt;
       &lt;th&gt;Neighborhood&lt;/th&gt;
-      &lt;th&gt;Neighborhood Latitude&lt;/th&gt;
-      &lt;th&gt;Neighborhood Longitude&lt;/th&gt;
       &lt;th&gt;ID&lt;/th&gt;
       &lt;th&gt;Venue&lt;/th&gt;
-      &lt;th&gt;Venue Latitude&lt;/th&gt;
-      &lt;th&gt;Venue Longitude&lt;/th&gt;
+      &lt;th&gt;Latitude&lt;/th&gt;
+      &lt;th&gt;Longitude&lt;/th&gt;
       &lt;th&gt;Venue Category&lt;/th&gt;
     &lt;/tr&gt;
   &lt;/thead&gt;
@@ -469,8 +455,6 @@ bh_all_venues.head()
     &lt;tr&gt;
       &lt;th&gt;0&lt;/th&gt;
       &lt;td&gt;AARAO REIS&lt;/td&gt;
-      &lt;td&gt;-19.847221&lt;/td&gt;
-      &lt;td&gt;-43.919508&lt;/td&gt;
       &lt;td&gt;4eb1d86e77c814d925751c99&lt;/td&gt;
       &lt;td&gt;Chapa Mágica&lt;/td&gt;
       &lt;td&gt;-19.845448&lt;/td&gt;
@@ -480,8 +464,6 @@ bh_all_venues.head()
     &lt;tr&gt;
       &lt;th&gt;1&lt;/th&gt;
       &lt;td&gt;AARAO REIS&lt;/td&gt;
-      &lt;td&gt;-19.847221&lt;/td&gt;
-      &lt;td&gt;-43.919508&lt;/td&gt;
       &lt;td&gt;5bf1cc4275eee40039f91adf&lt;/td&gt;
       &lt;td&gt;Burger King&lt;/td&gt;
       &lt;td&gt;-19.846823&lt;/td&gt;
@@ -491,8 +473,6 @@ bh_all_venues.head()
     &lt;tr&gt;
       &lt;th&gt;2&lt;/th&gt;
       &lt;td&gt;AARAO REIS&lt;/td&gt;
-      &lt;td&gt;-19.847221&lt;/td&gt;
-      &lt;td&gt;-43.919508&lt;/td&gt;
       &lt;td&gt;4daba4b84b22f071ead33715&lt;/td&gt;
       &lt;td&gt;Celo Burguer&lt;/td&gt;
       &lt;td&gt;-19.847524&lt;/td&gt;
@@ -502,8 +482,6 @@ bh_all_venues.head()
     &lt;tr&gt;
       &lt;th&gt;3&lt;/th&gt;
       &lt;td&gt;AARAO REIS&lt;/td&gt;
-      &lt;td&gt;-19.847221&lt;/td&gt;
-      &lt;td&gt;-43.919508&lt;/td&gt;
       &lt;td&gt;516dc84d498e618c69124919&lt;/td&gt;
       &lt;td&gt;bobs&lt;/td&gt;
       &lt;td&gt;-19.846710&lt;/td&gt;
@@ -513,8 +491,6 @@ bh_all_venues.head()
     &lt;tr&gt;
       &lt;th&gt;4&lt;/th&gt;
       &lt;td&gt;AARAO REIS&lt;/td&gt;
-      &lt;td&gt;-19.847221&lt;/td&gt;
-      &lt;td&gt;-43.919508&lt;/td&gt;
       &lt;td&gt;539991af498ea6a823188d29&lt;/td&gt;
       &lt;td&gt;Padaria Vila Verde&lt;/td&gt;
       &lt;td&gt;-19.847362&lt;/td&gt;
@@ -564,7 +540,6 @@ Name: Venue Category, Length: 272, dtype: int64
   &lt;li&gt;if the class == ‘high’&lt;/li&gt;
   &lt;li&gt;if the class == ‘regular’&lt;/li&gt;
   &lt;li&gt;if the class == ‘low’&lt;/li&gt;
-  &lt;li&gt;if the class == ‘high’ or ‘luxury’&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;p&gt;```python
@@ -1085,7 +1060,6 @@ build_evaluate(X, y3) ```
   &lt;li&gt;if the class == ‘high’: 0.8666&lt;/li&gt;
   &lt;li&gt;if the class == ‘regular’: 0.3333&lt;/li&gt;
   &lt;li&gt;if the class == ‘low’: &lt;strong&gt;0.9&lt;/strong&gt;&lt;/li&gt;
-  &lt;li&gt;if the class == ‘high’ or ‘luxury’: 0.7666&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;h3 id=&quot;food-venue-categories-dataset-scores&quot;&gt;4.2 Food venue categories dataset scores&lt;/h3&gt;
@@ -1096,7 +1070,6 @@ build_evaluate(X, y3) ```
   &lt;li&gt;if the class == ‘high’: &lt;strong&gt;0.96&lt;/strong&gt;&lt;/li&gt;
   &lt;li&gt;if the class == ‘regular’: 0.3076&lt;/li&gt;
   &lt;li&gt;if the class == ‘low’: &lt;strong&gt;0.923&lt;/strong&gt;&lt;/li&gt;
-  &lt;li&gt;if the class == ‘high’ or ‘luxury’: 0.7692&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;h3 id=&quot;professional-venue-categories-dataset-scores&quot;&gt;4.3 Professional venue categories dataset scores&lt;/h3&gt;
@@ -1107,7 +1080,6 @@ build_evaluate(X, y3) ```
   &lt;li&gt;if the class == ‘high’: 0.8928&lt;/li&gt;
   &lt;li&gt;if the class == ‘regular’: 0.4286&lt;/li&gt;
   &lt;li&gt;if the class == ‘low’: 0.8214&lt;/li&gt;
-  &lt;li&gt;if the class == ‘high’ or ‘luxury’: 0.75&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;h2 id=&quot;discussion&quot;&gt;5. Discussion&lt;/h2&gt;
