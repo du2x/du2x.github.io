@@ -16,7 +16,7 @@ Similarly, the city government also needs as much information as possible from e
 
 Amongst all information about neighborhoods, one that stands out is its prevailing social class. The needs and opportunities of a neighborhood are often associated with this information.
 
-Here, we will seek to develop a model capable of predicting the prevailing social class of each neighborhood, based on the categories of establishments there. This model will be trained with data from the set of reports of establishments in each neighborhood, retrievable from the Foursquare API and with the data a report from UFMG (University of Minas Gerais) that informs the majority social class of each neighborhood. 
+Here, we will seek to develop a model capable of predicting the prevailing social class of each neighborhood, based on the categories of venues there. This model will be trained with data from the set of reports of venues in each neighborhood, retrievable from the Foursquare API and with the data a report from UFMG (University of Minas Gerais) that informs the majority social class of each neighborhood. 
 
 If the model works well, we may use it to find out a valuable information of neighborhood on cities similar to Belo Horizonte that hasn't a report about their neighborhood prevailing social class.
 
@@ -365,12 +365,10 @@ bh_food_venues.head()
     <tr style="text-align: right;">
       <th></th>
       <th>Neighborhood</th>
-      <th>Neighborhood Latitude</th>
-      <th>Neighborhood Longitude</th>
       <th>ID</th>
       <th>Venue</th>
-      <th>Venue Latitude</th>
-      <th>Venue Longitude</th>
+      <th>Latitude</th>
+      <th>Longitude</th>
       <th>Venue Category</th>
     </tr>
   </thead>
@@ -378,8 +376,6 @@ bh_food_venues.head()
     <tr>
       <th>0</th>
       <td>AARAO REIS</td>
-      <td>-19.847221</td>
-      <td>-43.919508</td>
       <td>4eb1d86e77c814d925751c99</td>
       <td>Chapa Mágica</td>
       <td>-19.845448</td>
@@ -389,8 +385,6 @@ bh_food_venues.head()
     <tr>
       <th>1</th>
       <td>AARAO REIS</td>
-      <td>-19.847221</td>
-      <td>-43.919508</td>
       <td>5bf1cc4275eee40039f91adf</td>
       <td>Burger King</td>
       <td>-19.846823</td>
@@ -400,8 +394,6 @@ bh_food_venues.head()
     <tr>
       <th>2</th>
       <td>AARAO REIS</td>
-      <td>-19.847221</td>
-      <td>-43.919508</td>
       <td>4daba4b84b22f071ead33715</td>
       <td>Celo Burguer</td>
       <td>-19.847524</td>
@@ -411,8 +403,6 @@ bh_food_venues.head()
     <tr>
       <th>3</th>
       <td>AARAO REIS</td>
-      <td>-19.847221</td>
-      <td>-43.919508</td>
       <td>516dc84d498e618c69124919</td>
       <td>bobs</td>
       <td>-19.846710</td>
@@ -422,8 +412,6 @@ bh_food_venues.head()
     <tr>
       <th>4</th>
       <td>AARAO REIS</td>
-      <td>-19.847221</td>
-      <td>-43.919508</td>
       <td>539991af498ea6a823188d29</td>
       <td>Padaria Vila Verde</td>
       <td>-19.847362</td>
@@ -479,12 +467,10 @@ bh_all_venues.head()
     <tr style="text-align: right;">
       <th></th>
       <th>Neighborhood</th>
-      <th>Neighborhood Latitude</th>
-      <th>Neighborhood Longitude</th>
       <th>ID</th>
       <th>Venue</th>
-      <th>Venue Latitude</th>
-      <th>Venue Longitude</th>
+      <th>Latitude</th>
+      <th>Longitude</th>
       <th>Venue Category</th>
     </tr>
   </thead>
@@ -492,8 +478,6 @@ bh_all_venues.head()
     <tr>
       <th>0</th>
       <td>AARAO REIS</td>
-      <td>-19.847221</td>
-      <td>-43.919508</td>
       <td>4eb1d86e77c814d925751c99</td>
       <td>Chapa Mágica</td>
       <td>-19.845448</td>
@@ -503,8 +487,6 @@ bh_all_venues.head()
     <tr>
       <th>1</th>
       <td>AARAO REIS</td>
-      <td>-19.847221</td>
-      <td>-43.919508</td>
       <td>5bf1cc4275eee40039f91adf</td>
       <td>Burger King</td>
       <td>-19.846823</td>
@@ -514,8 +496,6 @@ bh_all_venues.head()
     <tr>
       <th>2</th>
       <td>AARAO REIS</td>
-      <td>-19.847221</td>
-      <td>-43.919508</td>
       <td>4daba4b84b22f071ead33715</td>
       <td>Celo Burguer</td>
       <td>-19.847524</td>
@@ -525,8 +505,6 @@ bh_all_venues.head()
     <tr>
       <th>3</th>
       <td>AARAO REIS</td>
-      <td>-19.847221</td>
-      <td>-43.919508</td>
       <td>516dc84d498e618c69124919</td>
       <td>bobs</td>
       <td>-19.846710</td>
@@ -536,8 +514,6 @@ bh_all_venues.head()
     <tr>
       <th>4</th>
       <td>AARAO REIS</td>
-      <td>-19.847221</td>
-      <td>-43.919508</td>
       <td>539991af498ea6a823188d29</td>
       <td>Padaria Vila Verde</td>
       <td>-19.847362</td>
@@ -592,7 +568,6 @@ The target (y) will be tested in the following formats:
 * if the class == 'high'
 * if the class == 'regular'
 * if the class == 'low'
-* if the class == 'high' or 'luxury'
 
 
 ```python
@@ -1118,7 +1093,6 @@ As mentioned before, we built KNN, SVM and Logistic regression models, but we wi
 * if the class == 'high': 0.8666
 * if the class == 'regular': 0.3333
 * if the class == 'low': **0.9**
-* if the class == 'high' or 'luxury': 0.7666
 
 ### 4.2 Food venue categories dataset scores
 
@@ -1127,7 +1101,6 @@ As mentioned before, we built KNN, SVM and Logistic regression models, but we wi
 * if the class == 'high': **0.96**
 * if the class == 'regular': 0.3076
 * if the class == 'low': **0.923**
-* if the class == 'high' or 'luxury': 0.7692
 
 ### 4.3 Professional venue categories dataset scores
 
@@ -1136,7 +1109,6 @@ As mentioned before, we built KNN, SVM and Logistic regression models, but we wi
 * if the class == 'high': 0.8928
 * if the class == 'regular': 0.4286
 * if the class == 'low': 0.8214
-* if the class == 'high' or 'luxury': 0.75
 
 ## 5. Discussion
 
