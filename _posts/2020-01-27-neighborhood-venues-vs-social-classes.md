@@ -1,7 +1,11 @@
 ---
 layout: post
+comments: true
 title:  "Neighbordhood Venues Categories Pattern vs Neighborhood Prevailing Social Classes"
+date:   2020-01-27 16:09:02 +0000
+categories: python machine-learning ml data-science
 ---
+
 
 
 ## 1. Introduction 

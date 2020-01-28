@@ -6,8 +6,8 @@
 </description>
     <link>http://du2x.github.io/</link>
     <atom:link href="http://du2x.github.io/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Mon, 27 Jan 2020 23:19:30 -0300</pubDate>
-    <lastBuildDate>Mon, 27 Jan 2020 23:19:30 -0300</lastBuildDate>
+    <pubDate>Mon, 27 Jan 2020 23:25:54 -0300</pubDate>
+    <lastBuildDate>Mon, 27 Jan 2020 23:25:54 -0300</lastBuildDate>
     <generator>Jekyll v3.0.1</generator>
     
       <item>
@@ -1120,10 +1120,18 @@ build_evaluate(X, y3) ```
 
 &lt;p&gt;Even though we couldn’t get a great model to predict the actual class of a Neighborhood, we could get interesting results on predicting the ‘high’ and ‘low’ classes using the Food categories dataset, and predicting ‘luxury’ and ‘low’ casses using the All categories dataset.&lt;/p&gt;
 </description>
-        <pubDate>Mon, 27 Jan 2020 00:00:00 -0300</pubDate>
-        <link>http://du2x.github.io/2020/01/27/neighborhood-venues-vs-social-classes.html</link>
-        <guid isPermaLink="true">http://du2x.github.io/2020/01/27/neighborhood-venues-vs-social-classes.html</guid>
+        <pubDate>Mon, 27 Jan 2020 13:09:02 -0300</pubDate>
+        <link>http://du2x.github.io/python/machine-learning/ml/data-science/2020/01/27/neighborhood-venues-vs-social-classes.html</link>
+        <guid isPermaLink="true">http://du2x.github.io/python/machine-learning/ml/data-science/2020/01/27/neighborhood-venues-vs-social-classes.html</guid>
         
+        
+        <category>python</category>
+        
+        <category>machine-learning</category>
+        
+        <category>ml</category>
+        
+        <category>data-science</category>
         
       </item>
     
