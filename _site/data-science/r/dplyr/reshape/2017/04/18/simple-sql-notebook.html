@@ -6,12 +6,11 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>du2x Blog</title>
-  <meta name="description" content="Data science, python and other IT cool stuff. 
-">
+  <title>Simple SQL Notebook</title>
+  <meta name="description" content="Last month I noticed that something like jupyter notebook but just for quering databases it would be very useful for me. That’s because me and some colleague...">
 
   <link rel="stylesheet" href="/css/main.css">
-  <link rel="canonical" href="http://du2x.github.io/">
+  <link rel="canonical" href="http://du2x.github.io/data-science/r/dplyr/reshape/2017/04/18/simple-sql-notebook.html">
   <link rel="alternate" type="application/rss+xml" title="du2x Blog" href="http://du2x.github.io/feed.xml">
 </head>
 
@@ -55,49 +54,47 @@
 
     <div class="page-content">
       <div class="wrapper">
-        <div class="home">
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
 
-  <h1 class="page-heading">Posts</h1>
+  <header class="post-header">
+    <h1 class="post-title" itemprop="name headline">Simple SQL Notebook</h1>
+    <p class="post-meta"><time datetime="2017-04-18T13:09:02-03:00" itemprop="datePublished">Apr 18, 2017</time></p>
+  </header>
 
-  <ul class="post-list">
-    
-      <li>
-        <span class="post-meta">Jan 27, 2020</span>
+  <div class="post-content" itemprop="articleBody">
+    <p>Last month I noticed that something like jupyter notebook but just for quering databases it would be very useful for me. That’s because me and some colleagues do many analyzes with sql queries and those analyzes are kept on our local machines.</p>
 
-        <h2>
-          <a class="post-link" href="/2020/01/27/neighborhood-venues-vs-social-classes.html">Neighborhood Venues Vs Social Classes</a>
-        </h2>
-      </li>
-    
-      <li>
-        <span class="post-meta">Apr 18, 2017</span>
+<p>So I created that “Simple SQL Notebook”. It creates a tool where we can make the analyzes and easily share or even put them to a VCS.</p>
 
-        <h2>
-          <a class="post-link" href="/data-science/r/dplyr/reshape/2017/04/18/simple-sql-notebook.html">Simple SQL Notebook</a>
-        </h2>
-      </li>
-    
-      <li>
-        <span class="post-meta">Apr 14, 2016</span>
+<p>It’s here: http://github.com/du2x/simplenotebook</p>
 
-        <h2>
-          <a class="post-link" href="/data-science/r/dplyr/reshape/2016/04/14/most-harmful-camalities-types.html">Figuring out the most harmful weather event types with R</a>
-        </h2>
-      </li>
-    
-      <li>
-        <span class="post-meta">Apr 6, 2016</span>
 
-        <h2>
-          <a class="post-link" href="/jwt/auth/2016/04/06/jwt-brief-overview.html">Authentication with JWT</a>
-        </h2>
-      </li>
-    
-  </ul>
+  </div>
 
-  <p class="rss-subscribe">subscribe <a href="/feed.xml">via RSS</a></p>
+<div id="disqus_thread"></div>
+<script>
+/**
+* RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+* LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables
+*/
+/*
+var disqus_config = function () {
+this.page.url = http://du2x.github.io/data-science/r/dplyr/reshape/2017/04/18/simple-sql-notebook.html; // Replace PAGE_URL with your page's canonical URL variable
+this.page.identifier = /data-science/r/dplyr/reshape/2017/04/18/simple-sql-notebook.html; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+};
+*/
+(function() { // DON'T EDIT BELOW THIS LINE
+var d = document, s = d.createElement('script');
 
-</div>
+s.src = '//du2xblog.disqus.com/embed.js';
+
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+
+</article>
 
       </div>
     </div>
