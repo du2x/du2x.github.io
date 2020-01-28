@@ -1,23 +1,11 @@
+---
+layout: post
+title:  "Neighbordhood Venues Categories Pattern vs Neighborhood Prevailing Social Classes"
+---
+
+
 # Neighbordhood Venues Categories Pattern vs Neighborhood Prevailing Social Classes
 
-
-```python
-import pandas as pd
-import numpy as np
-
-import requests
-
-CLIENT_ID = 'SPRWEPOSZVPI0WZ4MTQHQZWDYUSWBJ4FWK01XRNPQ25RGA4Z'
-CLIENT_SECRET = 'APDO2EBXWWR2LNB5V0V13MX40ZEJBFXPDMHS04WLFHBPNHPJ'
-
-VERSION = '20180605' # Foursquare API version
-
-#!conda install -c conda-forge folium=0.5.0 --yes # uncomment if needed
-
-print('Hello Capstone Project Course!')
-```
-
-    Hello Capstone Project Course!
 
 
 ## 1. Introduction 
@@ -105,7 +93,6 @@ We will retrieve the Neighborhood venues with Foursquare API, by calling the "qu
 
 
 ```python
-#!pip install geopy   # uncomment if need
 from geopy import Nominatim
 from geopy.exc import GeocoderUnavailable, GeocoderTimedOut, GeocoderServiceError
 
