@@ -4,10 +4,6 @@ title:  "Neighbordhood Venues Categories Pattern vs Neighborhood Prevailing Soci
 ---
 
 
-# Neighbordhood Venues Categories Pattern vs Neighborhood Prevailing Social Classes
-
-
-
 ## 1. Introduction 
 
 For an entrepreneur, choosing the location of a new establishment within a city can be a very important and also very difficult task. For this, it is advisable to have as much information as possible from each neighborhood.
