@@ -6,33 +6,13 @@
 </description>
     <link>http://du2x.github.io/</link>
     <atom:link href="http://du2x.github.io/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Mon, 27 Jan 2020 23:15:17 -0300</pubDate>
-    <lastBuildDate>Mon, 27 Jan 2020 23:15:17 -0300</lastBuildDate>
+    <pubDate>Mon, 27 Jan 2020 23:18:11 -0300</pubDate>
+    <lastBuildDate>Mon, 27 Jan 2020 23:18:11 -0300</lastBuildDate>
     <generator>Jekyll v3.0.1</generator>
     
       <item>
-        <title>Neighborhood Venues Vs Social Classes</title>
+        <title>Neighbordhood Venues Categories Pattern vs Neighborhood Prevailing Social Classes</title>
         <description>&lt;h1 id=&quot;neighbordhood-venues-categories-pattern-vs-neighborhood-prevailing-social-classes&quot;&gt;Neighbordhood Venues Categories Pattern vs Neighborhood Prevailing Social Classes&lt;/h1&gt;
-
-&lt;p&gt;```python
-import pandas as pd
-import numpy as np&lt;/p&gt;
-
-&lt;p&gt;import requests&lt;/p&gt;
-
-&lt;p&gt;CLIENT_ID = ‘SPRWEPOSZVPI0WZ4MTQHQZWDYUSWBJ4FWK01XRNPQ25RGA4Z’
-CLIENT_SECRET = ‘APDO2EBXWWR2LNB5V0V13MX40ZEJBFXPDMHS04WLFHBPNHPJ’&lt;/p&gt;
-
-&lt;p&gt;VERSION = ‘20180605’ # Foursquare API version&lt;/p&gt;
-
-&lt;h1 id=&quot;conda-install--c-conda-forge-folium050---yes--uncomment-if-needed&quot;&gt;!conda install -c conda-forge folium=0.5.0 –yes # uncomment if needed&lt;/h1&gt;
-
-&lt;p&gt;print(‘Hello Capstone Project Course!’)
-```&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Hello Capstone Project Course!
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
 
 &lt;h2 id=&quot;introduction&quot;&gt;1. Introduction&lt;/h2&gt;
 
@@ -112,7 +92,6 @@ bairros.head()
 &lt;p&gt;We will retrieve the Neighborhood venues with Foursquare API, by calling the “query” endpoint for each Neighborhood, which requires localization data. We use geopy library to retrieve localization data of each Neighborhood.&lt;/p&gt;
 
 &lt;p&gt;```python
-#!pip install geopy   # uncomment if need
 from geopy import Nominatim
 from geopy.exc import GeocoderUnavailable, GeocoderTimedOut, GeocoderServiceError&lt;/p&gt;
 
